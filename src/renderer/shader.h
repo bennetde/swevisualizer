@@ -1,5 +1,6 @@
 #pragma once
 #include <filesystem>
+#include <glm/glm.hpp>
 
 /**
  * RAII-Wrapper for using OpenGL shaders.
@@ -33,4 +34,9 @@ public:
 	 * Sets a floating point variable
 	*/
 	void setFloat(const std::string& name, float value) const;
+
+	/**
+	 * Sets a 4x4 matrix variable
+	*/
+	void setMat(const std::string& name, glm::mat4x4 value) const;
 };
