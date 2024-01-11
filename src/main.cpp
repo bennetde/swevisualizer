@@ -9,28 +9,42 @@
 
 #include "renderer/shader.h"
 #include "mesh/plane.h"
+#include "renderer/camera.h"
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
+void processKeyboard(GLFWwindow *window);
+void processMouse(GLFWwindow *window, double xpos, double ypos);
+
 int render();
 
 // settings
-unsigned int SCR_WIDTH = 800;
-unsigned int SCR_HEIGHT = 600;
+unsigned int SCR_WIDTH = 1000;
+unsigned int SCR_HEIGHT = 800;
 const std::filesystem::path vertexShaderPath(std::filesystem::current_path() / "resources/shaders/test.vs");
 const std::filesystem::path fragmentShaderPath(std::filesystem::current_path() / "resources/shaders/test.fs");
 
+Camera camera{};
+float lastX = SCR_WIDTH / 2;
+float lastY = SCR_HEIGHT / 2;
+float sensitivity = 0.1f;
+bool firstMouse = true;
+
 int main()
 {
-	try {
+	try
+	{
 		return render();
-	} catch(std::exception e) {
+	}
+	catch (std::exception e)
+	{
 		std::cout << e.what() << std::endl;
 	}
 	return 0;
 }
 
-int render() {
+int render()
+{
 	// glfw: initialize and configure
 	// ------------------------------
 	glfwInit();
@@ -44,7 +58,7 @@ int render() {
 
 	// glfw window creation
 	// --------------------
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "SWE Visualizer", NULL, NULL);
+	GLFWwindow *window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "SWE Visualizer", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -53,6 +67,7 @@ int render() {
 	}
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetCursorPosCallback(window, processMouse);
 
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
@@ -73,13 +88,10 @@ int render() {
 	Shader shader{vertexShaderPath, fragmentShaderPath};
 	Plane plane{};
 
-	glm::mat4 view = glm::mat4(1.0f);
-	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f)); 
-
-	// Enable depth testing 
+	// Enable depth testing
 	glEnable(GL_DEPTH_TEST);
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-	
+
 	// render loop
 	// -----------
 	while (!glfwWindowShouldClose(window))
@@ -87,7 +99,6 @@ int render() {
 		// input
 		// -----
 		processInput(window);
-
 
 		// render
 		// ------
@@ -98,24 +109,39 @@ int render() {
 
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-		glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH/(float)SCR_HEIGHT, 0.1f, 100.0f);
+		glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		shader.setMat("model", model);
-		shader.setMat("view", view);
+		shader.setMat("view", camera.getViewMatrix());
 		shader.setMat("projection", proj);
+
 		plane.render(shader);
 
 		// Render some example UI stuff
 		static bool showDemo = false;
-		if(ImGui::BeginMainMenuBar()) {
-			if(ImGui::BeginMenu("File")) {
-				if(ImGui::MenuItem("Open")) {
-
+		if (ImGui::BeginMainMenuBar())
+		{
+			if (ImGui::BeginMenu("File"))
+			{
+				if (ImGui::MenuItem("Open"))
+				{
 				}
 				ImGui::EndMenu();
 			}
-			if(ImGui::BeginMenu("Debug")) {
-				if(ImGui::MenuItem("Toggle Demo Window")) {
+			if (ImGui::BeginMenu("Debug"))
+			{
+				if (ImGui::MenuItem("Toggle Demo Window"))
+				{
 					showDemo = !showDemo;
+				}
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("Camera"))
+			{
+				if (ImGui::MenuItem("Re-center camera"))
+				{
+					camera.position = camera.originalPosition;
+					camera.front = camera.originalFront;
+					camera.up = camera.originalUp;
 				}
 				ImGui::EndMenu();
 			}
@@ -147,19 +173,69 @@ int render() {
 	return 0;
 }
 
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
+// process all input
+// ------------------
 void processInput(GLFWwindow *window)
 {
-	if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	processKeyboard(window);
+	processMouse(window, lastX, lastY);
+}
+
+void processMouse(GLFWwindow *window, double xpos, double ypos)
+{
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+	{
+		if (firstMouse)
+		{
+			lastX = xpos;
+			lastY = ypos;
+			firstMouse = false;
+		}
+
+		float xoffset = xpos - lastX;
+		float yoffset = lastY - ypos;
+		lastX = xpos;
+		lastY = ypos;
+
+		xoffset *= sensitivity;
+		yoffset *= sensitivity;
+
+		camera.yaw += xoffset;
+		camera.pitch += yoffset;
+
+		if (camera.pitch > 89.0f)
+			camera.pitch = 89.0f;
+		if (camera.pitch < -89.0f)
+			camera.pitch = -89.0f;
+
+		camera.direction.x = cos(glm::radians(camera.yaw)) * cos(glm::radians(camera.pitch));
+		camera.direction.y = sin(glm::radians(camera.pitch));
+		camera.direction.z = sin(glm::radians(camera.yaw)) * cos(glm::radians(camera.pitch));
+		camera.front = glm::normalize(camera.direction);
+	}
+}
+
+void processKeyboard(GLFWwindow *window)
+{
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+
+	// todo: eventuell cameraspeed noch mit deltaTime anpassen
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+		camera.position += camera.cameraSpeed * camera.front;
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+		camera.position -= camera.cameraSpeed * camera.front;
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+		camera.position += glm::normalize(glm::cross(camera.front, camera.up)) * camera.cameraSpeed;
+	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		camera.position -= glm::normalize(glm::cross(camera.front, camera.up)) * camera.cameraSpeed;
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
-	// make sure the viewport matches the new window dimensions; note that width and 
+	// make sure the viewport matches the new window dimensions; note that width and
 	// height will be significantly larger than specified on retina displays.
 	glViewport(0, 0, width, height);
 	SCR_WIDTH = width;
