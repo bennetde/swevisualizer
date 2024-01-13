@@ -9,6 +9,7 @@ project(
 
 set(CMAKE_CXX_STANDARD 17)
 find_package(OpenGL REQUIRED)
+#find_package(NetCDF REQUIRED)
 
 ## Include various dependencies using FetchContent
 include(FetchContent)
@@ -41,6 +42,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(glm)
 message("Loaded glm")
+
 
 # # IMGUI
 FetchContent_Declare(
@@ -77,6 +79,9 @@ target_include_directories(imgui PRIVATE
 target_link_libraries(imgui PRIVATE glfw glad ${OPENGL_LIBRARY})
 message("Loaded imgui")
 
+# target_link_libraries(SWEVisualizer PRIVATE ${NETCDF_LIBRARIES})
+# target_include_directories(SWEVisualizer PRIVATE ${NETCDF_INCLUDE_DIRS})
+
 add_custom_target(copy_resources ALL
 	COMMAND ${CMAKE_COMMAND} -E copy_directory
 	${PROJECT_SOURCE_DIR}/resources
@@ -84,3 +89,4 @@ add_custom_target(copy_resources ALL
 	COMMENT "Copying resources into binary directory ${CMAKE_CURRENT_BINARY_DIR}")
 
 add_subdirectory(src)
+add_subdirectory(Tests)

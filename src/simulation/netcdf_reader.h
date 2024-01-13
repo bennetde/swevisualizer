@@ -1,17 +1,32 @@
 #pragma once
 #include <netcdf.h>
+#include <vector>
 #include <filesystem>
 #include <array>
 
 class NetCDFReader {
 private:
 // TODO: Private variables for implementation here...
+
+	int ncid;
+	int dimXPointer, dimYPointer;
+	int valXPointer, valYPointer, valZPointer;
+	size_t dimXLength, dimYLength;
+	float cellWidth, cellHeight;
+	float xMin, yMin, xMax, yMax;
+
+	int dimTPointer;
+	size_t dimTLength;
+	int valHPointer, valHuPointer, valHvPointer, valBPointer, valTPointer, valEdgePointer;
+	int maxSimulationTimePointer;
+
 public:
 	/**
 	 * Initializes the reader.
 	 * @param filePath The path to the NetCDF-file.
 	*/
 	NetCDFReader(std::filesystem::path filePath);
+	~NetCDFReader();
 
 	/**
 	 * Returns a vector containing the time steps (in seconds) stored in the file.

@@ -9,6 +9,6 @@ if(MSVC) # Windows
 	target_include_directories(SWEVisualizer PUBLIC ${CMAKE_SOURCE_DIR}/extern/netcdf/include)
 else() # Linux
 	find_package(NetCDF REQUIRED)
-	target_link_libraries(${META_PROJECT_NAME} PUBLIC ${NETCDF_LIBRARIES} ${NETCDF_LIBRARIES_CXX})
-	target_include_directories(${NetCDF_INCLUDE_DIR})
+	target_link_libraries(SWEVisualizer PUBLIC ${NETCDF_LIBRARIES} ${NETCDF_LIBRARIES_CXX})
+	target_include_directories(SWEVisualizer PUBLIC ${NetCDF_INCLUDE_DIRS})
 endif()
