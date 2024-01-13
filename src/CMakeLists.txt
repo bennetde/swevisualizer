@@ -6,7 +6,9 @@ add_dependencies(SWEVisualizer copy_resources)
 
 if(MSVC) # Windows
 	target_link_directories(SWEVisualizer PUBLIC ${CMAKE_SOURCE_DIR}/extern/netcdf/lib/)
+	target_link_libraries(SWEVisualizer PUBLIC ${CMAKE_SOURCE_DIR}/extern/netcdf/lib/netcdf.lib)
 	target_include_directories(SWEVisualizer PUBLIC ${CMAKE_SOURCE_DIR}/extern/netcdf/include)
+	message("linked netcdf")
 else() # Linux
 	find_package(NetCDF REQUIRED)
 	target_link_libraries(SWEVisualizer PUBLIC ${NETCDF_LIBRARIES} ${NETCDF_LIBRARIES_CXX})

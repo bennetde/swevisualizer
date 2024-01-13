@@ -1,5 +1,5 @@
 #include "netcdf_reader.h"
-
+#include <netcdf.h>
 // TODO: Implementation of the reader
 
 NetCDFReader::NetCDFReader(std::filesystem::path filePath) {
@@ -32,7 +32,7 @@ NetCDFReader::NetCDFReader(std::filesystem::path filePath) {
 NetCDFReader::~NetCDFReader() {
 	int retval;
 	if((retval = nc_close(ncid))) {
-		throw std::runtime_error("Could not close NETCDF-File");
+		// throw std::runtime_error("Could not close NETCDF-File");
 	}
 }
 
