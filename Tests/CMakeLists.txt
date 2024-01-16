@@ -16,24 +16,21 @@
 FetchContent_Declare(
     Catch2
     GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-    GIT_TAG v2.13.7
+    GIT_TAG v3.5.2
 )
-FetchContent_MakeAvailable(catch2)
+FetchContent_MakeAvailable(Catch2)
 message("Loaded Catch2")
 
-# Definieren Sie explizit Ihre Test-Quelldateien
-set(TEST_SOURCES
-    NetCDFReaderTest.cpp
-	../simulation/netcdf_reader.cpp
-    # Fügen Sie hier weitere Testdateien hinzu
-)
+add_executable(NetCDFReaderTest NetCDFReaderTest.cpp ${CMAKE_SOURCE_DIR}/src/simulation/netcdf_reader.cpp)
+add_test(NAME NetCDFReaderTest COMMAND NetCDFReaderTest)
+target_link_libraries(NetCDFReaderTest PUBLIC Catch2::Catch2WithMain Catch2)
+target_include_directories(NetCDFReaderTest PUBLIC ${CMAKE_SOURCE_DIR}/src/simulation)
 
-add_executable(NetCDFReaderTest NetCDFReaderTest.cpp ../src/simulation/netcdf_reader.cpp)
-target_link_libraries(NetCDFReaderTest PRIVATE Catch2::Catch2)
+enable_testing()
 
 if(MSVC) # Windows
     target_link_directories(NetCDFReaderTest PUBLIC ${CMAKE_SOURCE_DIR}/extern/netcdf/lib/)
-	target_link_libraries(SWEVisualizer PUBLIC ${CMAKE_SOURCE_DIR}/extern/netcdf/lib/netcdf.lib)
+	target_link_libraries(NetCDFReaderTest PUBLIC ${CMAKE_SOURCE_DIR}/extern/netcdf/lib/netcdf.lib)
     target_include_directories(NetCDFReaderTest PUBLIC ${CMAKE_SOURCE_DIR}/extern/netcdf/include)
 	message("added netcdf ${CMAKE_SOURCE_DIR}")
 else() # Linux
