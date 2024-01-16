@@ -7,12 +7,16 @@ A OpenGL visualizer for shallow water equations.
 - [GLAD2](https://github.com/Dav1dde/glad)
 - [GLM](https://github.com/g-truc/glm)
 - [Dear ImGui](https://github.com/ocornut/imgui)
+- [Catch2](https://github.com/catchorg/Catch2)
+- NetCDF
 
 All dependencies other than OpenGL should be resolved by CMake itself.
 
 # Quick Setup
 
 ## Build System
+
+Currently only tested under Windows.
 
 For compilation, CMake, Make and a suitable compiler (e.g. gcc, clang, msvc) is needed.
 
