@@ -9,6 +9,7 @@ A OpenGL visualizer for shallow water equations.
 - [Dear ImGui](https://github.com/ocornut/imgui)
 - [Catch2](https://github.com/catchorg/Catch2)
 - NetCDF
+- [ImGuiFileDialog](https://github.com/aiekick/ImGuiFileDialog)
 
 All dependencies other than OpenGL should be resolved by CMake itself.
 

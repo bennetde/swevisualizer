@@ -10,6 +10,7 @@
 #include "renderer/shader.h"
 #include "mesh/plane.h"
 #include "renderer/camera.h"
+#include "../extern/ImGuiFileDialog/ImGuiFileDialog.h"
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -118,12 +119,29 @@ int render()
 
 		// Render some example UI stuff
 		static bool showDemo = false;
+		static bool openmenu = false;
+		if(openmenu) {
+			IGFD::FileDialogConfig config;
+			config.path = ".";
+			ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".nc", config);
+			if(ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
+				if(ImGuiFileDialog::Instance()->IsOk()) {
+					std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+      				std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+					std::cout << "File is " << filePathName << std::endl;
+				}
+
+				ImGuiFileDialog::Instance()->Close();
+				openmenu = false;
+			}
+		}
 		if (ImGui::BeginMainMenuBar())
 		{
 			if (ImGui::BeginMenu("File"))
 			{
 				if (ImGui::MenuItem("Open"))
 				{
+					openmenu = true;
 				}
 				ImGui::EndMenu();
 			}
