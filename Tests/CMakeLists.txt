@@ -34,9 +34,10 @@ if(MSVC) # Windows
     target_include_directories(NetCDFReaderTest PUBLIC ${CMAKE_SOURCE_DIR}/extern/netcdf/include)
 	message("added netcdf ${CMAKE_SOURCE_DIR}")
 else() # Linux
-    find_package(NetCDF REQUIRED)
-    target_link_libraries(NetCDFReaderTest PUBLIC ${NETCDF_LIBRARIES} ${NETCDF_LIBRARIES_CXX})
-    target_include_directories(NetCDFReaderTest PUBLIC ${NETCDF_INCLUDE_DIRS})
+	set(NETCDF_ROOT "${CMAKE_SOURCE_DIR}/extern/netcdf/mac")
+	target_link_directories(NetCDFReaderTest PUBLIC ${NETCDF_ROOT}/lib)
+	target_link_libraries(NetCDFReaderTest PUBLIC netcdf)
+	target_include_directories(NetCDFReaderTest PUBLIC ${NETCDF_ROOT}/include)
 endif()
 
 

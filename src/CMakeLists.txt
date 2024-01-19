@@ -11,7 +11,8 @@ if(WIN32) # Windows
 	target_include_directories(SWEVisualizer PUBLIC ${CMAKE_SOURCE_DIR}/extern/netcdf/include)
 	message("linked netcdf")
 else() # Linux
-	find_package(NetCDF REQUIRED)
-	target_link_libraries(SWEVisualizer PUBLIC ${NETCDF_LIBRARIES} ${NETCDF_LIBRARIES_CXX})
-	target_include_directories(SWEVisualizer PUBLIC ${NetCDF_INCLUDE_DIRS})
+	set(NETCDF_ROOT "${CMAKE_SOURCE_DIR}/extern/netcdf/mac")
+	target_link_directories(SWEVisualizer PUBLIC ${NETCDF_ROOT}/lib)
+	target_link_libraries(SWEVisualizer PUBLIC netcdf)
+	target_include_directories(SWEVisualizer PUBLIC ${NETCDF_ROOT}/include)
 endif()
