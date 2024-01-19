@@ -26,21 +26,7 @@ NetCDFReader::NetCDFReader(std::filesystem::path filePath) {
 	if((retval = nc_inq_varid(ncid, "y", &valYPointer))) {
 		throw std::runtime_error("Could not load y variable");
 	}
-
-}
-
-NetCDFReader::~NetCDFReader() {
-	int retval;
-	if((retval = nc_close(ncid))) {
-		// throw std::runtime_error("Could not close NETCDF-File");
-	}
-}
-
-
-std::vector<float> NetCDFReader::getTimeSteps() {
-    int retval;
-    std::vector<float> timeSteps;
-    if((retval = nc_inq_dimid(ncid, "time", &dimTPointer))) {
+	if((retval = nc_inq_dimid(ncid, "time", &dimTPointer))) {
         throw std::runtime_error("Could not load dimension t");
     }
     if((retval = nc_inq_dimlen(ncid, dimTPointer, &dimTLength))) {
@@ -49,6 +35,20 @@ std::vector<float> NetCDFReader::getTimeSteps() {
     if((retval = nc_inq_varid(ncid, "time", &valTPointer))) {
         throw std::runtime_error("Could not load time variable");
     }
+
+}
+
+NetCDFReader::~NetCDFReader() {
+	int retval;
+	if((retval = nc_close(ncid))) {
+		//throw std::runtime_error("Could not close NETCDF-File");
+	}
+}
+
+
+std::vector<float> NetCDFReader::getTimeSteps() {
+    int retval;
+    std::vector<float> timeSteps;
     timeSteps.resize(dimTLength);
     if((retval = nc_get_var_float(ncid, valTPointer, timeSteps.data()))) {
         throw std::runtime_error("Could not load time variable");

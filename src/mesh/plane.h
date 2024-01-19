@@ -5,7 +5,10 @@
 
 class Plane {
 	unsigned int vbo, vao, ebo;
+	size_t _nX, _nY;
+
+	bool _renderWireframe;
 public:
-	Plane();
+	Plane(size_t nX, size_t nY);
 	void render(Shader& shader);
 };

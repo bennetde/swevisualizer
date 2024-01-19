@@ -11,6 +11,8 @@
 #include "mesh/plane.h"
 #include "renderer/camera.h"
 #include "../extern/ImGuiFileDialog/ImGuiFileDialog.h"
+#include "simulation/netcdf_reader.h"
+#include "simulation/simulation.h"
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -87,7 +89,7 @@ int render()
 
 	// Initialize shader and plane for rendering
 	Shader shader{vertexShaderPath, fragmentShaderPath};
-	Plane plane{};
+	Plane plane{1000,1000};
 
 	// Enable depth testing
 	glEnable(GL_DEPTH_TEST);
@@ -127,8 +129,12 @@ int render()
 			if(ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
 				if(ImGuiFileDialog::Instance()->IsOk()) {
 					std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-      				std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
-					std::cout << "File is " << filePathName << std::endl;
+					NetCDFReader reader(filePathName);
+					std::cout << reader.getXDimension() << std::endl;
+					auto vec = reader.getTimeSteps();
+					for(auto &t : vec) {
+						std::cout << t << std::endl;
+					}
 				}
 
 				ImGuiFileDialog::Instance()->Close();

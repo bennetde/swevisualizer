@@ -5,7 +5,7 @@ target_link_libraries(SWEVisualizer PUBLIC glfw imgui glad glm)
 target_include_directories(SWEVisualizer PUBLIC ${imgui_SOURCE_DIR} ${imgui_SOURCE_DIR}/backends)
 add_dependencies(SWEVisualizer copy_resources)
 
-if(MSVC) # Windows
+if(WIN32) # Windows
 	target_link_directories(SWEVisualizer PUBLIC ${CMAKE_SOURCE_DIR}/extern/netcdf/lib/)
 	target_link_libraries(SWEVisualizer PUBLIC ${CMAKE_SOURCE_DIR}/extern/netcdf/lib/netcdf.lib)
 	target_include_directories(SWEVisualizer PUBLIC ${CMAKE_SOURCE_DIR}/extern/netcdf/include)
