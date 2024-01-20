@@ -11,7 +11,7 @@ void Simulation::loadSimulation(std::filesystem::path path) {
 	_curPath = path;
 	_hPlane = Plane{_reader.getXDimension(), _reader.getYDimension()};
 	_loaded = true;
-	_reader.getHeightsForTimeStep(400, _hPlane.value().displacements.data());
+	_reader.getHeightsForTimeStep(0, _hPlane.value().displacements.data());
 	_hPlane.value().updateDisplacementBuffer();
 	_fileTimes = _reader.getTimeSteps();
 	_maxFileTimeIndex = _fileTimes[_fileTimes.size()-1];
