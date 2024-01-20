@@ -129,7 +129,7 @@ int render()
 			if(ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
 				if(ImGuiFileDialog::Instance()->IsOk()) {
 					std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-					NetCDFReader reader(filePathName);
+					simulation::NetCDFReader reader(filePathName);
 					std::cout << reader.getXDimension() << std::endl;
 					auto vec = reader.getTimeSteps();
 					for(auto &t : vec) {

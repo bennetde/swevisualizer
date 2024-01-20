@@ -6,12 +6,34 @@
 #include <catch2/catch_approx.hpp>
 #include "../src/simulation/netcdf_reader.h"
 
-#include <cstdint>
+TEST_CASE("CDFManagerTest", "[NetCDFReader]")
+{
+    std::string netCDFPath = "../Tests/TestData.nc";
+    std::filesystem::path path(netCDFPath);
 
-uint64_t fibonacci(uint64_t number) {
-    return number < 2 ? number : fibonacci(number - 1) + fibonacci(number - 2);
-}
+    simulation::NetCDFReader cdfManager(path);
 
-TEST_CASE("NetCDFReaderTest", "[NetCDFReaderTest]") {
-	NetCDFReader reader("");
+    SECTION("Test Dimensionen")
+    {
+        REQUIRE(cdfManager.getXDimension() == 10);
+        REQUIRE(cdfManager.getYDimension() == 10);
+    }
+
+    SECTION("Teste getBathymetry")
+    {
+        float expectedValue = 10.0f; // Erwarteter Wert an dieser Position
+        float b[10 * 10];
+        cdfManager.getBathymetry(b);
+        REQUIRE(static_cast<bool>(b[0] == expectedValue));
+        // REQUIRE(b[0] == expectedValue);
+    }
+
+    // SECTION("Teste ungültige Indizes")
+    // {
+    //     size_t invalidXIndex = 10; // Ungültiger Index (außerhalb der Grenzen)
+    //     size_t invalidYIndex = 10; // Ungültiger Index (außerhalb der Grenzen)
+
+    //     REQUIRE_THROWS_AS(cdfManager.getBathymetry(invalidXIndex, 0), std::invalid_argument);
+    //     REQUIRE_THROWS_AS(cdfManager.getBathymetry(0, invalidYIndex), std::invalid_argument);
+    // }
 }
