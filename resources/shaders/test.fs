@@ -1,7 +1,12 @@
 #version 330 core
 out vec4 FragColor;
 
+
+in float o_displ;
 void main()
 {
-    FragColor = vec4(.2f, 0.4f, 0.5f, 0.0f);
+	vec4 col = vec4(0.0f);
+	// float val = step(10.01, o_displ);
+	col = vec4(o_displ / 15.0f);
+	FragColor = col;
 } 

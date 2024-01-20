@@ -1,13 +1,15 @@
 #include "netcdf_reader.h"
 #include <netcdf.h>
+#include <iostream>
 // TODO: Implementation of the reader
 
-NetCDFReader::NetCDFReader(std::filesystem::path filePath) {
+void NetCDFReader::open(std::filesystem::path filePath) {
     int retval;
     std::string pathString = filePath.string();
 	if((retval = nc_open(pathString.c_str(), NC_NOWRITE, &ncid))) {
 		throw std::invalid_argument("Could not open NETCDF-File");
 	}
+	std::cout << "Opened with id " << ncid << std::endl;
 	if((retval = nc_inq_dimid(ncid, "x", &dimXPointer))) {
 		throw std::runtime_error("Could not load dimension x");
 	}
@@ -35,16 +37,11 @@ NetCDFReader::NetCDFReader(std::filesystem::path filePath) {
     if((retval = nc_inq_varid(ncid, "time", &valTPointer))) {
         throw std::runtime_error("Could not load time variable");
     }
+	if((retval = nc_inq_varid(ncid, "h", &valHPointer))) {
+        throw std::runtime_error("Could not load h variable");
+    }
 
 }
-
-NetCDFReader::~NetCDFReader() {
-	int retval;
-	if((retval = nc_close(ncid))) {
-		//throw std::runtime_error("Could not close NETCDF-File");
-	}
-}
-
 
 std::vector<float> NetCDFReader::getTimeSteps() {
     int retval;
@@ -66,13 +63,12 @@ size_t NetCDFReader::getYDimension() {
 
 void NetCDFReader::getHeightsForTimeStep(size_t timeIndex, float heights[]) {
     int retval;
-    if((retval = nc_inq_varid(ncid, "h", &valHPointer))) {
-        throw std::runtime_error("Could not load h variable");
-    }
+
     size_t start[3] = {timeIndex, 0, 0};
     size_t count[3] = {1, dimYLength, dimXLength};
     if((retval = nc_get_vara_float(ncid, valHPointer, start, count, heights))) {
-        throw std::runtime_error("Could not load h variable");
+		std::cout << retval << std::endl;
+        throw std::runtime_error("Could not get h variable");
     }
 }
 

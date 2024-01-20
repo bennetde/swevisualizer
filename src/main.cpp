@@ -31,6 +31,8 @@ Camera camera{};
 float lastX = SCR_WIDTH / 2;
 float lastY = SCR_HEIGHT / 2;
 float sensitivity = 0.1f;
+double previousTime = glfwGetTime();
+double currentTime, deltaTime;
 bool firstMouse = true;
 
 int main()
@@ -90,6 +92,7 @@ int render()
 	// Initialize shader and plane for rendering
 	Shader shader{vertexShaderPath, fragmentShaderPath};
 	Plane plane{1000,1000};
+	Simulation sim{};
 
 	// Enable depth testing
 	glEnable(GL_DEPTH_TEST);
@@ -99,6 +102,9 @@ int render()
 	// -----------
 	while (!glfwWindowShouldClose(window))
 	{
+		currentTime = glfwGetTime();
+		deltaTime = currentTime - previousTime;
+		previousTime = currentTime;
 		// input
 		// -----
 		processInput(window);
@@ -117,7 +123,9 @@ int render()
 		shader.setMat("view", camera.getViewMatrix());
 		shader.setMat("projection", proj);
 
-		plane.render(shader);
+		// plane.render(shader);
+		sim.update(deltaTime);
+		sim.render(shader);
 
 		// Render some example UI stuff
 		static bool showDemo = false;
@@ -129,12 +137,7 @@ int render()
 			if(ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
 				if(ImGuiFileDialog::Instance()->IsOk()) {
 					std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-					NetCDFReader reader(filePathName);
-					std::cout << reader.getXDimension() << std::endl;
-					auto vec = reader.getTimeSteps();
-					for(auto &t : vec) {
-						std::cout << t << std::endl;
-					}
+					sim.loadSimulation(filePathName);
 				}
 
 				ImGuiFileDialog::Instance()->Close();
@@ -171,6 +174,7 @@ int render()
 			}
 			ImGui::Button("Play");
 			ImGui::Button("Pause");
+			ImGui::Text("MS: %f", deltaTime);
 			ImGui::EndMainMenuBar();
 		}
 		if (showDemo)
@@ -245,14 +249,14 @@ void processKeyboard(GLFWwindow *window)
 		glfwSetWindowShouldClose(window, true);
 
 	// todo: eventuell cameraspeed noch mit deltaTime anpassen
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		camera.position += camera.cameraSpeed * camera.front;
-	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 		camera.position -= camera.cameraSpeed * camera.front;
-	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-		camera.position += glm::normalize(glm::cross(camera.front, camera.up)) * camera.cameraSpeed;
-	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 		camera.position -= glm::normalize(glm::cross(camera.front, camera.up)) * camera.cameraSpeed;
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		camera.position += glm::normalize(glm::cross(camera.front, camera.up)) * camera.cameraSpeed;
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes

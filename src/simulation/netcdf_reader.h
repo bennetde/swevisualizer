@@ -25,8 +25,7 @@ public:
 	 * Initializes the reader.
 	 * @param filePath The path to the NetCDF-file.
 	*/
-	NetCDFReader(std::filesystem::path filePath);
-	~NetCDFReader();
+	void open(std::filesystem::path filePath);
 
 	/**
 	 * Returns a vector containing the time steps (in seconds) stored in the file.

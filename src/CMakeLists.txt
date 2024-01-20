@@ -1,4 +1,4 @@
-add_executable(SWEVisualizer main.cpp mesh/plane.cpp renderer/shader.cpp renderer/camera.cpp simulation/netcdf_reader.cpp
+add_executable(SWEVisualizer main.cpp mesh/plane.cpp renderer/shader.cpp renderer/camera.cpp simulation/netcdf_reader.cpp simulation/simulation.cpp
 ${CMAKE_SOURCE_DIR}/extern/ImGuiFileDialog/ImGuiFileDialog.cpp)
 target_compile_features(SWEVisualizer PRIVATE cxx_std_17)
 target_link_libraries(SWEVisualizer PUBLIC glfw imgui glad glm)
