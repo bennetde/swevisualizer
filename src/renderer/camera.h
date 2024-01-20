@@ -2,6 +2,7 @@
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <GLFW/glfw3.h>
 
 class Camera
 {
@@ -11,6 +12,7 @@ public:
 	float pitch = 0.0f;
 
 	glm::mat4x4 getViewMatrix();
+	// void updateCamera(GLFWwindow *window, double lastX, double lastY, double xpos, double ypos, bool firstMouse, double sensitivity);
 	// for resetting
 	const glm::vec3 originalPosition = glm::vec3(0.0f, 0.0f, 3.0f);
 	const glm::vec3 originalUp = glm::vec3(0.0f, 1.0f, 0.0f);

@@ -245,18 +245,18 @@ void processMouse(GLFWwindow *window, double xpos, double ypos)
 
 void processKeyboard(GLFWwindow *window)
 {
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
-
-	// todo: eventuell cameraspeed noch mit deltaTime anpassen
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		camera.position += camera.cameraSpeed * camera.front;
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		camera.position -= camera.cameraSpeed * camera.front;
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+		camera.position += camera.up * camera.cameraSpeed;
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+		camera.position -= camera.up * camera.cameraSpeed;
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
 		camera.position -= glm::normalize(glm::cross(camera.front, camera.up)) * camera.cameraSpeed;
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
 		camera.position += glm::normalize(glm::cross(camera.front, camera.up)) * camera.cameraSpeed;
+	if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
+		camera.position += camera.cameraSpeed * camera.front;
+	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
+		camera.position -= camera.cameraSpeed * camera.front;
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes

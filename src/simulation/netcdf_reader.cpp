@@ -34,7 +34,7 @@ void NetCDFReader::open(std::filesystem::path filePath) {
     if((retval = nc_inq_dimlen(ncid, dimTPointer, &dimTLength))) {
         throw std::runtime_error("Could not load dimension t length");
     }
-    if((retval = nc_inq_varid(ncid, "time", &valTPointer))) {
+    if ((retval = nc_inq_dimid(ncid, "time", &valTPointer))) {
         throw std::runtime_error("Could not load time variable");
     }
 	if((retval = nc_inq_varid(ncid, "h", &valHPointer))) {
@@ -108,4 +108,5 @@ void NetCDFReader::getBathymetry(float b[]) {
     if((retval = nc_get_vara_float(ncid, valBPointer, start, count, b))) {
         throw std::runtime_error("Could not load b variable");
     }
+}
 }
