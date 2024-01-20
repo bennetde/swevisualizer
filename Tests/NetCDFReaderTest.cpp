@@ -11,7 +11,8 @@ TEST_CASE("CDFManagerTest", "[NetCDFReader]")
     std::string netCDFPath = "../Tests/TestData.nc";
     std::filesystem::path path(netCDFPath);
 
-    simulation::NetCDFReader cdfManager(path);
+    NetCDFReader cdfManager;
+	cdfManager.open(path);
 
     SECTION("Test Dimensionen")
     {

@@ -109,4 +109,3 @@ void NetCDFReader::getBathymetry(float b[]) {
         throw std::runtime_error("Could not load b variable");
     }
 }
-}

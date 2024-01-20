@@ -4,8 +4,6 @@
 #include <filesystem>
 #include <array>
 
-namespace simulation {
-
 class NetCDFReader {
 private:
 // TODO: Private variables for implementation here...
@@ -76,4 +74,3 @@ public:
 	*/
 	void getBathymetry(float bathymetry[]);
 };
-}
