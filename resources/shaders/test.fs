@@ -2,11 +2,13 @@
 out vec4 FragColor;
 
 
+
 in float o_displ;
+
+uniform float maxHeight;
+
 void main()
 {
-	vec4 col = vec4(0.0f);
-	// float val = step(10.01, o_displ);
-	col = vec4(o_displ / 15.0f);
-	FragColor = col;
+	float normalizedHeight = (o_displ / maxHeight);
+    FragColor = mix(vec4(0.0, 0.0, 0.5, 1.0), vec4(0.5, 0.5, 1.0, 1.0), normalizedHeight);	
 } 

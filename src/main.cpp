@@ -123,6 +123,10 @@ int render()
 		shader.setMat("view", camera.getViewMatrix());
 		shader.setMat("projection", proj);
 
+		// shader.use();
+		shader.use();
+		shader.setFloat("maxHeight", 10);
+
 		// plane.render(shader);
 		sim.update(deltaTime);
 		sim.render(shader);
