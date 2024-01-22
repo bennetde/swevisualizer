@@ -91,7 +91,7 @@ int render()
 
 	// Initialize shader and plane for rendering
 	Shader shader{vertexShaderPath, fragmentShaderPath};
-	Plane plane{1000,1000};
+	Plane plane{1000, 1000};
 	Simulation sim{};
 
 	// Enable depth testing
@@ -123,6 +123,10 @@ int render()
 		shader.setMat("view", camera.getViewMatrix());
 		shader.setMat("projection", proj);
 
+		// shader.use();
+		shader.use();
+		shader.setFloat("maxHeight", 10);
+
 		// plane.render(shader);
 		sim.update(deltaTime);
 		sim.render(shader);
@@ -130,12 +134,15 @@ int render()
 		// Render some example UI stuff
 		static bool showDemo = false;
 		static bool openmenu = false;
-		if(openmenu) {
+		if (openmenu)
+		{
 			IGFD::FileDialogConfig config;
 			config.path = ".";
 			ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".nc", config);
-			if(ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
-				if(ImGuiFileDialog::Instance()->IsOk()) {
+			if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey"))
+			{
+				if (ImGuiFileDialog::Instance()->IsOk())
+				{
 					std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
 					sim.loadSimulation(filePathName);
 				}
@@ -245,6 +252,9 @@ void processMouse(GLFWwindow *window, double xpos, double ypos)
 
 void processKeyboard(GLFWwindow *window)
 {
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+
 	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
 		camera.position += camera.up * camera.cameraSpeed;
 	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
