@@ -4,15 +4,27 @@
 // Simulation::Simulation() {
 
 // }
-
 void Simulation::loadSimulation(std::filesystem::path path) {
+	if(_loaded) {
+		_reader.close();
+	}
 	_reader = NetCDFReader();
 	_reader.open(path);
 	_curPath = path;
+
+	// Create Plane with dimensions of the simulation
 	_hPlane = Plane{_reader.getXDimension(), _reader.getYDimension()};
 	_loaded = true;
+
+	// Load initial wave heights 
 	_reader.getHeightsForTimeStep(0, _hPlane.value().displacements.data());
 	_hPlane.value().updateDisplacementBuffer();
+	// eventuell minHeight, maxHeight werte aus displacements data lesen
+
+	// TODO: Load bathymetry, hu, hv
+	// _reader.getBathymetry()
+
+	// Set Time
 	_fileTimes = _reader.getTimeSteps();
 	_maxFileTimeIndex = _fileTimes[_fileTimes.size()-1];
 	_currentFileTimeIndex = 0;
@@ -46,6 +58,14 @@ void Simulation::render(Shader& shader) {
 	if(ImGui::Button("Reset")) {
 		reset();
 	}
+	// make this members of the class
+	float minHeight, maxHeight;
+	if(ImGui::InputFloat("Minimum Height Value", &minHeight)) {
+		shader.setFloat("minHeight", minHeight);
+	}
+	ImGui::InputFloat("Maximum Height Value", &maxHeight);
+	// eventuell color wheel
+	// ImGui::ColorPicker4("test", );
 	ImGui::End();
 }
 
@@ -56,11 +76,14 @@ void Simulation::update(double deltaTime) {
 		pause();
 		return;
 	}
+	// maybe simulation speed variable
 	_curTime += 1;
 
 	if(_curTime >= _fileTimes[_currentFileTimeIndex + 1]) {
 		_reader.getHeightsForTimeStep(_currentFileTimeIndex+1, _hPlane.value().displacements.data());
 		_hPlane.value().updateDisplacementBuffer();
+		// TODO: Load hu, hv....
+
 		_currentFileTimeIndex++;
 	}
 }

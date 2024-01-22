@@ -26,6 +26,8 @@ public:
 	 * @param filePath The path to the NetCDF-file.
 	*/
 	void open(std::filesystem::path filePath);
+	
+	void close();
 
 	/**
 	 * Returns a vector containing the time steps (in seconds) stored in the file.

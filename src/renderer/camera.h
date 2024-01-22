@@ -8,13 +8,13 @@ class Camera
 {
 public:
 	float cameraSpeed = 0.05f;
-	float yaw = -90.0f;
+	float yaw = 90.0f;
 	float pitch = 0.0f;
 
 	glm::mat4x4 getViewMatrix();
 	// void updateCamera(GLFWwindow *window, double lastX, double lastY, double xpos, double ypos, bool firstMouse, double sensitivity);
 	// for resetting
-	const glm::vec3 originalPosition = glm::vec3(0.0f, 0.0f, 3.0f);
+	const glm::vec3 originalPosition = glm::vec3(0.0f, 0.0f, -10.0f);
 	const glm::vec3 originalUp = glm::vec3(0.0f, 1.0f, 0.0f);
 	const glm::vec3 originalFront = glm::vec3(0.0f, 0.0f, -1.0f);
 

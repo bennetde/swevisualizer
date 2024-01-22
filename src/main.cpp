@@ -211,7 +211,7 @@ void processInput(GLFWwindow *window)
 
 void processMouse(GLFWwindow *window, double xpos, double ypos)
 {
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
 	{
 		if (firstMouse)
 		{

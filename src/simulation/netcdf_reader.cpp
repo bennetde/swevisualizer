@@ -43,6 +43,10 @@ void NetCDFReader::open(std::filesystem::path filePath) {
 
 }
 
+void NetCDFReader::close() {
+	nc_close(ncid);
+}
+
 std::vector<float> NetCDFReader::getTimeSteps() {
     int retval;
     std::vector<float> timeSteps;

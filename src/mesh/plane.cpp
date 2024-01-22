@@ -3,6 +3,7 @@
 #include <imgui.h>
 #include <vector>
 
+// TODO: init bathymetry, hu, hv with nX * nY size (like displacements vector)
 Plane::Plane(size_t nX, size_t nY) : _nX(nX), _nY(nY), _renderWireframe(false), _scale(1.0f), displacements(nX * nY) {
 	std::vector<float> vertices(nX * nY * 3);
 	std::vector<unsigned int> indices((nX-1)*(nY-1)*2*3);
@@ -45,16 +46,20 @@ Plane::Plane(size_t nX, size_t nY) : _nX(nX), _nY(nY), _renderWireframe(false), 
 	glGenBuffers(1, &ebo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
+
+	// Todo: Copy paste this for hu, hv, bathymetry vectors
 	glGenBuffers(1, &displacementBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, displacementBuffer);
 	glBufferData(GL_ARRAY_BUFFER, displacements.size() * sizeof(float), displacements.data(), GL_DYNAMIC_DRAW);
-	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, sizeof(float), (void*) 0);
-	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, sizeof(float), (void*) 0); // TODO: for hu,hv.., increase first argument by 1
+	glEnableVertexAttribArray(1); // must be equal to the first argument ^
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
 }
 
+
+// TODO: copy paste this for hu, hv, bathymetry
 void Plane::updateDisplacementBuffer() {
 	glBindBuffer(GL_ARRAY_BUFFER, displacementBuffer);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, displacements.size() * sizeof(float), displacements.data());
