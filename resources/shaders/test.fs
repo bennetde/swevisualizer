@@ -10,8 +10,8 @@ uniform float minHeight; // add others...
 uniform float maxHeight;
 void main()
 {
-	vec4 minCol = vec4(0.0,0.0,1.0,1.0);
-	vec4 maxCol = vec4(1.0,0.0,0.0,1.0);
+	vec4 minCol = vec4(1.0,1.0,1.0,1.0);
+	vec4 maxCol = vec4(0.0,0.0,1.0,1.0);
 
 
 	//muss noch überarbeitet werden, eventuell werden minHeight und maxHeight nicht neu gesetzt
