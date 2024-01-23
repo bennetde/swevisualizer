@@ -91,7 +91,6 @@ int render()
 
 	// Initialize shader and plane for rendering
 	Shader shader{vertexShaderPath, fragmentShaderPath};
-	Plane plane{1000, 1000};
 	Simulation sim{};
 
 	// Enable depth testing
@@ -123,11 +122,6 @@ int render()
 		shader.setMat("view", camera.getViewMatrix());
 		shader.setMat("projection", proj);
 
-		// shader.use();
-		shader.use();
-		shader.setFloat("maxHeight", 10);
-
-		// plane.render(shader);
 		sim.update(deltaTime);
 		sim.render(shader);
 
