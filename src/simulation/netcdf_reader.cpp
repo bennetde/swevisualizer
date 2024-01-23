@@ -90,7 +90,7 @@ void NetCDFReader::getHorizontalMomentumForTimeStep(size_t timeIndex, float hu[]
 }
 
 
-void NetCDFReader::geVerticalMomentumForTimeStep(size_t timeIndex, float hv[]) {
+void NetCDFReader::getVerticalMomentumForTimeStep(size_t timeIndex, float hv[]) {
     int retval;
     if((retval = nc_inq_varid(ncid, "hv", &valHvPointer))) {
         throw std::runtime_error("Could not load hv variable");

@@ -4,7 +4,7 @@
 #include <vector>
 
 // TODO: init bathymetry, hu, hv with nX * nY size (like displacements vector)
-Plane::Plane(size_t nX, size_t nY) : _nX(nX), _nY(nY), _renderWireframe(false), _scale(1.0f), displacements(nX * nY) {
+Plane::Plane(size_t nX, size_t nY) : _nX(nX), _nY(nY), _renderWireframe(false), _scale(1.0f), displacements(nX * nY), hu(nX * nY), hv(nX * nY), bathymetry(nX * nY) {
 	std::vector<float> vertices(nX * nY * 3);
 	std::vector<unsigned int> indices((nX-1)*(nY-1)*2*3);
 	// std::cout << (nX-1)*(nY-1)*2*3 << std::endl;
@@ -47,22 +47,57 @@ Plane::Plane(size_t nX, size_t nY) : _nX(nX), _nY(nY), _renderWireframe(false), 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
-	// Todo: Copy paste this for hu, hv, bathymetry vectors
+	// displacement
 	glGenBuffers(1, &displacementBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, displacementBuffer);
 	glBufferData(GL_ARRAY_BUFFER, displacements.size() * sizeof(float), displacements.data(), GL_DYNAMIC_DRAW);
 	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, sizeof(float), (void*) 0); // TODO: for hu,hv.., increase first argument by 1
 	glEnableVertexAttribArray(1); // must be equal to the first argument ^
 
+	// hu
+	glGenBuffers(1, &huBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, huBuffer);
+	glBufferData(GL_ARRAY_BUFFER, hu.size() * sizeof(float), hu.data(), GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, sizeof(float), (void*) 0);
+	glEnableVertexAttribArray(2);
+
+	// hv
+	glGenBuffers(1, &hvBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, displacementBuffer);
+	glBufferData(GL_ARRAY_BUFFER, hv.size() * sizeof(float), hv.data(), GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(float), (void*) 0);
+	glEnableVertexAttribArray(3);
+
+	// bathymetry
+	glGenBuffers(1, &bathymetryBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, bathymetryBuffer);
+	glBufferData(GL_ARRAY_BUFFER, bathymetry.size() * sizeof(float), bathymetry.data(), GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, sizeof(float), (void*) 0);
+	glEnableVertexAttribArray(4);
+
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
 }
 
 
-// TODO: copy paste this for hu, hv, bathymetry
 void Plane::updateDisplacementBuffer() {
 	glBindBuffer(GL_ARRAY_BUFFER, displacementBuffer);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, displacements.size() * sizeof(float), displacements.data());
+}
+
+void Plane::updateHuBuffer() {
+	glBindBuffer(GL_ARRAY_BUFFER, huBuffer);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, hu.size() * sizeof(float), hu.data());
+}
+
+void Plane::updateHvBuffer() {
+	glBindBuffer(GL_ARRAY_BUFFER, hvBuffer);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, hv.size() * sizeof(float), hv.data());
+}
+
+void Plane::updateBathymetryBuffer() {
+	glBindBuffer(GL_ARRAY_BUFFER, bathymetryBuffer);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, bathymetry.size() * sizeof(float), bathymetry.data());
 }
 
 void Plane::render(Shader& shader) {

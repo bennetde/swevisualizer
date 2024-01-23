@@ -21,8 +21,9 @@ void Simulation::loadSimulation(std::filesystem::path path) {
 	_hPlane.value().updateDisplacementBuffer();
 	// eventuell minHeight, maxHeight werte aus displacements data lesen
 
-	// TODO: Load bathymetry, hu, hv
-	// _reader.getBathymetry()
+	// Load Bathymetry
+	_reader.getBathymetry(_hPlane.value().bathymetry.data());
+	_hPlane.value().updateBathymetryBuffer();
 
 	// Set Time
 	_fileTimes = _reader.getTimeSteps();
@@ -58,12 +59,13 @@ void Simulation::render(Shader& shader) {
 	if(ImGui::Button("Reset")) {
 		reset();
 	}
-	// make this members of the class
-	float minHeight, maxHeight;
+	
 	if(ImGui::InputFloat("Minimum Height Value", &minHeight)) {
 		shader.setFloat("minHeight", minHeight);
 	}
-	ImGui::InputFloat("Maximum Height Value", &maxHeight);
+	if(ImGui::InputFloat("Maximum Height Value", &maxHeight)) {
+		shader.setFloat("maxHeight", maxHeight);
+	}
 	// eventuell color wheel
 	// ImGui::ColorPicker4("test", );
 	ImGui::End();
@@ -80,9 +82,15 @@ void Simulation::update(double deltaTime) {
 	_curTime += 1;
 
 	if(_curTime >= _fileTimes[_currentFileTimeIndex + 1]) {
+		// Load displacement
 		_reader.getHeightsForTimeStep(_currentFileTimeIndex+1, _hPlane.value().displacements.data());
 		_hPlane.value().updateDisplacementBuffer();
-		// TODO: Load hu, hv....
+		// Load hu
+		_reader.getHorizontalMomentumForTimeStep(_currentFileTimeIndex+1, _hPlane.value().hu.data());
+		_hPlane.value().updateHuBuffer();
+		// Load hv
+		_reader.getVerticalMomentumForTimeStep(_currentFileTimeIndex+1, _hPlane.value().hv.data());
+		_hPlane.value().updateHvBuffer();
 
 		_currentFileTimeIndex++;
 	}

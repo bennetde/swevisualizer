@@ -67,7 +67,7 @@ public:
 	 * The hv array has to be of size XDim * YDim to be able to store all the momentums for a specific time index.
 	 * By accessing the hv variable and using nc_get_vara_float to read a variable as fast as possible.
 	*/
-	void geVerticalMomentumForTimeStep(size_t timeIndex, float hv[]);
+	void getVerticalMomentumForTimeStep(size_t timeIndex, float hv[]);
 
 	/**
 	 * Gets the bathymetry of the simulation and stores the relative heights inside the passed bathymetry array.
