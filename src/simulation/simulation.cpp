@@ -25,8 +25,13 @@ void Simulation::loadSimulation(std::filesystem::path path) {
 	_reader.getBathymetry(_hPlane.value().bathymetry.data());
 	_hPlane.value().updateBathymetryBuffer();
 
+	// Load min and max height
+	minHeight = _reader.getMinHeight();
+	maxHeight = _reader.getMaxHeight();
+
 	// Set Time
 	_fileTimes = _reader.getTimeSteps();
+
 	_maxFileTimeIndex = _fileTimes[_fileTimes.size()-1];
 	_currentFileTimeIndex = 0;
 	reset();
@@ -36,6 +41,9 @@ void Simulation::render(Shader& shader) {
 	if(_hPlane.has_value()) {
 		_hPlane.value().render(shader);
 	}
+	
+	shader.setFloat("minHeight", minHeight);
+	shader.setFloat("maxHeight", maxHeight);
 
 	if(ImGui::Begin("Simulation Settings")) {
 		if(_curPath.has_value()) {

@@ -17,7 +17,7 @@ void main()
 	//mix (https://registry.khronos.org/OpenGL-Refpages/gl4/html/mix.xhtml)
 	vec4 mycol = mix(minCol, maxCol, new_val01);
 	// vec4 col = vec4(0.0f);
-	// float val = step(10.01, o_displ);
+	float val = step(10.01, o_displ);
 	// r,g,b,a
 	// col = vec4(o_displ / 100.0f);
 	FragColor = mycol;

@@ -89,6 +89,34 @@ void NetCDFReader::getHorizontalMomentumForTimeStep(size_t timeIndex, float hu[]
     }
 }
 
+float NetCDFReader::getMinHeight() {
+    int retval;
+    size_t totalSize = dimTLength * dimYLength * dimXLength;
+    std::vector<float> heights(totalSize);
+    size_t start[3] = {0, 0, 0};
+    size_t count[3] = {dimTLength, dimYLength, dimXLength};
+
+    if((retval = nc_get_vara_float(ncid, valHPointer, start, count, heights.data()))) {
+        throw std::runtime_error("Could not get h variable");
+    }
+
+    return *std::min_element(heights.begin(), heights.end());
+}
+
+float NetCDFReader::getMaxHeight() {
+    int retval;
+    size_t totalSize = dimTLength * dimYLength * dimXLength;
+    std::vector<float> heights(totalSize);
+    size_t start[3] = {0, 0, 0};
+    size_t count[3] = {dimTLength, dimYLength, dimXLength};
+
+    if((retval = nc_get_vara_float(ncid, valHPointer, start, count, heights.data()))) {
+        throw std::runtime_error("Could not get h variable");
+    }
+
+    return *std::max_element(heights.begin(), heights.end());
+}
+
 
 void NetCDFReader::getVerticalMomentumForTimeStep(size_t timeIndex, float hv[]) {
     int retval;
