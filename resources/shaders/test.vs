@@ -10,10 +10,16 @@ uniform mat4 projection;
 
 uniform float scale;
 out float o_displ;
+out float o_bathymetry;
+out float o_hu;
+out float o_hv;
 
 void main()
 {
 	vec3 pos = vec3(-aPos.x, aPos.y, 0.0);
     gl_Position = projection * view * model * (vec4(pos * scale, 1.0));
 	o_displ = displ;
+	o_bathymetry = bathymetry;
+	o_hu = hu;
+	o_hv = hv;
 }
