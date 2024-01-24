@@ -17,7 +17,7 @@ All dependencies other than OpenGL should be resolved by CMake itself.
 
 ## Build System
 
-Currently only tested under Windows.
+Currently only tested under Windows. For  Windows it is needed that NetCDF is installed and the bin directory added to PATH.
 
 For compilation, CMake, Make and a suitable compiler (e.g. gcc, clang, msvc) is needed.
 
