@@ -21,11 +21,11 @@ uniform bool hv;
 uniform bool h;
 void main()
 {
-	vec4 minCol = vec4(0.0, 0.0,0.0,0.5);
-	vec4 maxCol = vec4(0.0, 0.0,1.0,0.5);
+	vec4 minCol = vec4(0.5, 0.7,0.8,1.0);
+	vec4 maxCol = vec4(0.0, 0.0,1.0,1.0);
 
-	vec4 minhuCol = vec4(0.0, 0.0,0.0,0.1);
-	vec4 maxhuCol = vec4(0.0, 0.0,1.0,0.1);
+	vec4 minhuCol = vec4(0.2, 0.0,0.0,1.0);
+	vec4 maxhuCol = vec4(0.5, 0.0,0.0,1.0);
 
 	
 	//muss noch überarbeitet werden, eventuell werden minHeight und maxHeight nicht neu gesetzt
@@ -48,6 +48,7 @@ void main()
 	float huAlpha = smoothstep(minHu, maxHu, o_hu);
 	vec4 huLayer = mix(minhuCol, maxhuCol, huAlpha);
 	FragColor = mix(mycol, huLayer, huAlpha);
+	// FragColor = mix(mycol, huLayer, 1.0);
    
 	vec4 minBathymetryCol = vec4(0.0, 0.5, 0.0, 1.0);
 	vec4 maxBathymetryCol = vec4(0.4, 0.2, 0.0, 1.0);
@@ -55,4 +56,17 @@ void main()
 		float bathymetryAlpha = smoothstep(minBathymetry, maxBathymetry, o_bathymetry);
         FragColor = mix(minBathymetryCol, maxBathymetryCol, bathymetryAlpha);
 	}
+
+	// vec4 minBathymetryCol = vec4(0.0, 0.9, 0.0, 1.0);
+	// vec4 maxBathymetryCol = vec4(0.0, 0.4, 0.0, 1.0);
+	// float bathymetryAlpha = smoothstep(minBathymetry, maxBathymetry, o_bathymetry);
+    // vec4 bathymetryLayer = mix(minBathymetryCol, maxBathymetryCol, bathymetryAlpha);
+	// FragColor = mix(FragColor, bathymetryLayer, bathymetryAlpha);
+	// if (o_bathymetry > 0) {
+	// 	vec4 minBathymetryCol = vec4(0.0, 0.5, 0.0, 1.0);
+	// 	vec4 maxBathymetryCol = vec4(0.4, 0.2, 0.0, 1.0);
+	// 	float bathymetryAlpha = smoothstep(0, maxBathymetry, o_bathymetry);
+    // 	vec4 bathymetryLayer = mix(minBathymetryCol, maxBathymetryCol, 1.0);
+	// 	FragColor = bathymetryLayer;
+	// }
 } 

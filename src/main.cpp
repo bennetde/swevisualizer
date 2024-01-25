@@ -16,6 +16,8 @@
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
+void processMouse(GLFWwindow *window, double xpos, double ypos);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 int render();
 
@@ -31,6 +33,8 @@ float lastY = SCR_HEIGHT / 2;
 float sensitivity = 0.1f;
 double previousTime = glfwGetTime();
 double currentTime, deltaTime;
+bool firstMouse =true;
+double scrollOffset = 0.0;
 
 int main()
 {
@@ -69,6 +73,8 @@ int render()
 	}
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetCursorPosCallback(window, processMouse);
+	glfwSetScrollCallback(window, scroll_callback);
 
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
@@ -103,6 +109,9 @@ int render()
 		// input
 		// -----
 		processInput(window);
+		double xpos, ypos;
+    	glfwGetCursorPos(window, &xpos, &ypos);
+    	processMouse(window, xpos, ypos);
 
 		// render
 		// ------
@@ -222,7 +231,42 @@ void processInput(GLFWwindow *window)
 		camera.position += camera.cameraSpeed * camera.front;
 	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
 		camera.position -= camera.cameraSpeed * camera.front;
+
+	// processMouse(window, lastX, lastY);
 }
+
+void processMouse(GLFWwindow *window, double xpos, double ypos) {
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
+		float xOffset = xpos - lastX;
+		float yOffset = lastY - ypos;
+
+		lastX = xpos;
+		lastY = ypos;
+
+		float sensitivity = 0.1f;
+
+		xOffset *= sensitivity;
+		yOffset *= sensitivity;
+
+		camera.position += glm::normalize(glm::cross(camera.front, camera.up)) * xOffset;
+		camera.position += camera.up * yOffset;
+	} else {
+        // Handle zooming with mouse scroll
+        // Sensitivity to scroll wheel movement for zooming
+        float zoomSensitivity = 1.0f;
+
+        // Update camera zoom based on scroll offset
+        camera.position += camera.front * static_cast<float>(scrollOffset) * zoomSensitivity;
+
+        // Reset scroll offset after using it
+        scrollOffset = 0.0;
+    }
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+    scrollOffset = yoffset;
+}
+
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
