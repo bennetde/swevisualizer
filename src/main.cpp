@@ -122,7 +122,7 @@ int render()
 
 		glm::mat4 model = glm::mat4(1.0f);
 		// model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-		glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 5000.0f);
 		shader.setMat("model", model);
 		shader.setMat("view", camera.getViewMatrix());
 		shader.setMat("projection", proj);
@@ -236,12 +236,14 @@ void processInput(GLFWwindow *window)
 }
 
 void processMouse(GLFWwindow *window, double xpos, double ypos) {
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
-		float xOffset = xpos - lastX;
-		float yOffset = lastY - ypos;
+	ImGuiIO& io = ImGui::GetIO();
+	float xOffset = xpos - lastX;
+	float yOffset = lastY - ypos;
 
-		lastX = xpos;
-		lastY = ypos;
+	lastX = xpos;
+	lastY = ypos;
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS && !io.WantCaptureMouse) {
+
 
 		float sensitivity = 0.1f;
 
@@ -264,6 +266,8 @@ void processMouse(GLFWwindow *window, double xpos, double ypos) {
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+	ImGuiIO& io = ImGui::GetIO();
+	if(io.WantCaptureMouse) return;
     scrollOffset = yoffset;
 }
 
