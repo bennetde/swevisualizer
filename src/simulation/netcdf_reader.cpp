@@ -117,6 +117,62 @@ float NetCDFReader::getMaxHeight() {
     return *std::max_element(heights.begin(), heights.end());
 }
 
+float NetCDFReader::getMinHu() {
+    int retval;
+    size_t totalSize = dimTLength * dimYLength * dimXLength;
+    std::vector<float> hus(totalSize);
+    size_t start[3] = {0, 0, 0};
+    size_t count[3] = {dimTLength, dimYLength, dimXLength};
+
+    if((retval = nc_get_vara_float(ncid, valHuPointer, start, count, hus.data()))) {
+        throw std::runtime_error("Could not get hu variable");
+    }
+
+    return *std::min_element(hus.begin(), hus.end());
+}
+
+float NetCDFReader::getMaxHu() {
+    int retval;
+    size_t totalSize = dimTLength * dimYLength * dimXLength;
+    std::vector<float> hus(totalSize);
+    size_t start[3] = {0, 0, 0};
+    size_t count[3] = {dimTLength, dimYLength, dimXLength};
+
+    if((retval = nc_get_vara_float(ncid, valHuPointer, start, count, hus.data()))) {
+        throw std::runtime_error("Could not get hu variable");
+    }
+
+    return *std::max_element(hus.begin(), hus.end());
+}
+
+float NetCDFReader::getMinHv() {
+    int retval;
+    size_t totalSize = dimTLength * dimYLength * dimXLength;
+    std::vector<float> hvs(totalSize);
+    size_t start[3] = {0, 0, 0};
+    size_t count[3] = {dimTLength, dimYLength, dimXLength};
+
+    if((retval = nc_get_vara_float(ncid, valHvPointer, start, count, hvs.data()))) {
+        throw std::runtime_error("Could not get hv variable");
+    }
+
+    return *std::min_element(hvs.begin(), hvs.end());
+}
+
+float NetCDFReader::getMaxHv() {
+    int retval;
+    size_t totalSize = dimTLength * dimYLength * dimXLength;
+    std::vector<float> hvs(totalSize);
+    size_t start[3] = {0, 0, 0};
+    size_t count[3] = {dimTLength, dimYLength, dimXLength};
+
+    if((retval = nc_get_vara_float(ncid, valHvPointer, start, count, hvs.data()))) {
+        throw std::runtime_error("Could not get hv variable");
+    }
+
+    return *std::max_element(hvs.begin(), hvs.end());
+}
+
 
 void NetCDFReader::getVerticalMomentumForTimeStep(size_t timeIndex, float hv[]) {
     int retval;

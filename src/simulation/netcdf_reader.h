@@ -58,6 +58,14 @@ public:
 
 	float getMaxHeight();
 
+	float getMinHu();
+
+	float getMaxHu();
+
+	float getMinHv();
+
+	float getMaxHv();
+
 	/**
 	 * Gets the horizontal momentum of the simulation for a specific time step and sets the values inside the heights array.
 	 * The hu array has to be of size XDim * YDim to be able to store all the momentums for a specific time index.
