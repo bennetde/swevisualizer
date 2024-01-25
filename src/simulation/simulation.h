@@ -12,8 +12,15 @@ private:
 	float _curTime;
 	bool _isPlaying;
 	bool _loaded;
-	float minHeight = 10.0;
-	float maxHeight = 20.0;
+	float minHeight;
+	float maxHeight;
+	float minHu;
+	float maxHu;
+	float minHv;
+	float maxHv;
+	bool hu = false;
+	bool hv = false;
+	bool h = true;
 	
 	std::optional<std::filesystem::path> _curPath;
 	NetCDFReader _reader;

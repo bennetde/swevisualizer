@@ -25,9 +25,13 @@ void Simulation::loadSimulation(std::filesystem::path path) {
 	_reader.getBathymetry(_hPlane.value().bathymetry.data());
 	_hPlane.value().updateBathymetryBuffer();
 
-	// Load min and max height
+	// Load min and max height, hu, hv
 	minHeight = _reader.getMinHeight();
 	maxHeight = _reader.getMaxHeight();
+	minHu = _reader.getMinHu();
+	maxHu = _reader.getMaxHu();
+	minHv = _reader.getMinHv();
+	maxHv = _reader.getMaxHv();
 
 	// Set Time
 	_fileTimes = _reader.getTimeSteps();
@@ -44,6 +48,13 @@ void Simulation::render(Shader& shader) {
 	
 	shader.setFloat("minHeight", minHeight);
 	shader.setFloat("maxHeight", maxHeight);
+	shader.setFloat("minHu", minHu);
+	shader.setFloat("maxHu", maxHu);
+	shader.setFloat("minHv", minHv);
+	shader.setFloat("maxHv", maxHv);
+	shader.setBool("hv", hu);
+	shader.setBool("hv", hv);
+	shader.setBool("hv", h);
 
 	if(ImGui::Begin("Simulation Settings")) {
 		if(_curPath.has_value()) {
@@ -61,8 +72,8 @@ void Simulation::render(Shader& shader) {
 		}
 	}
 	ImGui::SameLine();
-	bool t = true;
-	ImGui::Checkbox("Reverse", &t);
+	// bool t = true;
+	// ImGui::Checkbox("Reverse", &t);
 	ImGui::SameLine();
 	if(ImGui::Button("Reset")) {
 		reset();
@@ -74,6 +85,28 @@ void Simulation::render(Shader& shader) {
 	if(ImGui::InputFloat("Maximum Height Value", &maxHeight)) {
 		shader.setFloat("maxHeight", maxHeight);
 	}
+	if(ImGui::InputFloat("Minimum Hu Value", &minHu)) {
+		shader.setFloat("minHu", minHu);
+	}
+	if(ImGui::InputFloat("Maximum Hu Value", &maxHu)) {
+		shader.setFloat("maxHu", maxHu);
+	}
+	if(ImGui::InputFloat("Minimum Hv Value", &minHv)) {
+		shader.setFloat("minHv", minHv);
+	}
+	if(ImGui::InputFloat("Maximum Hv Value", &maxHv)) {
+		shader.setFloat("maxHv", maxHv);
+	}
+	if(ImGui::Checkbox("hu", &hu)) {
+		shader.setBool("hu", hu);
+	}
+	if(ImGui::Checkbox("hv", &hv)) {
+		shader.setBool("hv", hv);
+	}
+	if(ImGui::Checkbox("h", &h)) {
+		shader.setBool("h", h);
+	}
+
 	// eventuell color wheel
 	// ImGui::ColorPicker4("test", );
 	ImGui::End();
