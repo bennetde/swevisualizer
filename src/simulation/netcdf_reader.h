@@ -65,6 +65,10 @@ public:
 	float getMinHv();
 
 	float getMaxHv();
+	
+	float getMinBathymetry();
+
+	float getMaxBathymetry();
 
 	/**
 	 * Gets the horizontal momentum of the simulation for a specific time step and sets the values inside the heights array.

@@ -7,7 +7,8 @@
 // (e.g. current sim time, reference to the models that will be updated by the simulation, netcdf-reader, if the simulation
 // is currently paused or playing)
 
-class Simulation {
+class Simulation
+{
 private:
 	float _curTime;
 	bool _isPlaying;
@@ -18,10 +19,12 @@ private:
 	float maxHu;
 	float minHv;
 	float maxHv;
+	float minBathymetry;
+	float maxBathymetry;
 	bool hu = false;
 	bool hv = false;
 	bool h = true;
-	
+
 	std::optional<std::filesystem::path> _curPath;
 	NetCDFReader _reader;
 	std::optional<Plane> _hPlane;
@@ -29,6 +32,7 @@ private:
 	std::vector<float> _fileTimes;
 	size_t _currentFileTimeIndex;
 	size_t _maxFileTimeIndex;
+
 public:
 	// Simulation();
 	void loadSimulation(std::filesystem::path path);
@@ -37,5 +41,5 @@ public:
 	void reset();
 
 	void update(double deltaTime);
-	void render(Shader& shader);
+	void render(Shader &shader);
 };
