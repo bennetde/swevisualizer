@@ -203,33 +203,37 @@ float NetCDFReader::getMaxHv()
 
 float NetCDFReader::getMinBathymetry()
 {
-    int retval;
-    size_t totalSize = dimTLength * dimYLength * dimXLength;
+    size_t totalSize = dimYLength * dimXLength;
     std::vector<float> b(totalSize);
-    size_t start[3] = {0, 0, 0};
-    size_t count[3] = {dimTLength, dimYLength, dimXLength};
-
+    int retval;
+    if ((retval = nc_inq_varid(ncid, "b", &valBPointer)))
+    {
+        throw std::runtime_error("Could not load b variable");
+    }
+    size_t start[2] = {0, 0};
+    size_t count[2] = {dimYLength, dimXLength};
     if ((retval = nc_get_vara_float(ncid, valBPointer, start, count, b.data())))
     {
-        throw std::runtime_error("Could not get b variable");
+        throw std::runtime_error("Could not load b variable");
     }
-
     return *std::min_element(b.begin(), b.end());
 }
 
 float NetCDFReader::getMaxBathymetry()
 {
-    int retval;
-    size_t totalSize = dimTLength * dimYLength * dimXLength;
+    size_t totalSize = dimYLength * dimXLength;
     std::vector<float> b(totalSize);
-    size_t start[3] = {0, 0, 0};
-    size_t count[3] = {dimTLength, dimYLength, dimXLength};
-
+    int retval;
+    if ((retval = nc_inq_varid(ncid, "b", &valBPointer)))
+    {
+        throw std::runtime_error("Could not load b variable");
+    }
+    size_t start[2] = {0, 0};
+    size_t count[2] = {dimYLength, dimXLength};
     if ((retval = nc_get_vara_float(ncid, valBPointer, start, count, b.data())))
     {
-        throw std::runtime_error("Could not get hv variable");
+        throw std::runtime_error("Could not load b variable");
     }
-
     return *std::max_element(b.begin(), b.end());
 }
 
