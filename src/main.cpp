@@ -16,8 +16,6 @@
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
-void processKeyboard(GLFWwindow *window);
-void processMouse(GLFWwindow *window, double xpos, double ypos);
 
 int render();
 
@@ -33,7 +31,6 @@ float lastY = SCR_HEIGHT / 2;
 float sensitivity = 0.1f;
 double previousTime = glfwGetTime();
 double currentTime, deltaTime;
-bool firstMouse = true;
 
 int main()
 {
@@ -72,7 +69,6 @@ int render()
 	}
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	glfwSetCursorPosCallback(window, processMouse);
 
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
@@ -202,49 +198,14 @@ int render()
 	return 0;
 }
 
-// process all input
-// ------------------
+// prcess keyboard iput.
+//---------------------
+// ESC Key closes the window
+// UP/DOWN Key moves up/down
+// LEFT/RIGHT Key moves left/right
+// O Key zooms Out
+// I Key zooms In
 void processInput(GLFWwindow *window)
-{
-	processKeyboard(window);
-	processMouse(window, lastX, lastY);
-}
-
-void processMouse(GLFWwindow *window, double xpos, double ypos)
-{
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
-	{
-		if (firstMouse)
-		{
-			lastX = xpos;
-			lastY = ypos;
-			firstMouse = false;
-		}
-
-		float xoffset = xpos - lastX;
-		float yoffset = lastY - ypos;
-		lastX = xpos;
-		lastY = ypos;
-
-		xoffset *= sensitivity;
-		yoffset *= sensitivity;
-
-		camera.yaw += xoffset;
-		camera.pitch += yoffset;
-
-		if (camera.pitch > 89.0f)
-			camera.pitch = 89.0f;
-		if (camera.pitch < -89.0f)
-			camera.pitch = -89.0f;
-
-		camera.direction.x = cos(glm::radians(camera.yaw)) * cos(glm::radians(camera.pitch));
-		camera.direction.y = sin(glm::radians(camera.pitch));
-		camera.direction.z = sin(glm::radians(camera.yaw)) * cos(glm::radians(camera.pitch));
-		camera.front = glm::normalize(camera.direction);
-	}
-}
-
-void processKeyboard(GLFWwindow *window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
