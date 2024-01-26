@@ -15,7 +15,8 @@
 #include "simulation/simulation.h"
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
-void processInput(GLFWwindow *window);
+void processInput(GLFWwindow *window, double xpos, double ypos);
+void processKeyboard (GLFWwindow *window);
 void processMouse(GLFWwindow *window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
@@ -33,7 +34,7 @@ float lastY = SCR_HEIGHT / 2;
 float sensitivity = 0.1f;
 double previousTime = glfwGetTime();
 double currentTime, deltaTime;
-bool firstMouse =true;
+// bool firstMouse =true;
 double scrollOffset = 0.0;
 
 int main()
@@ -108,10 +109,10 @@ int render()
 		previousTime = currentTime;
 		// input
 		// -----
-		processInput(window);
+		
 		double xpos, ypos;
     	glfwGetCursorPos(window, &xpos, &ypos);
-    	processMouse(window, xpos, ypos);
+		processInput(window, xpos, ypos);
 
 		// render
 		// ------
@@ -214,25 +215,34 @@ int render()
 // LEFT/RIGHT Key moves left/right
 // O Key zooms Out
 // I Key zooms In
-void processInput(GLFWwindow *window)
-{
+void processInput(GLFWwindow *window, double xpos, double ypos) {
+	processKeyboard(window);
+	processMouse(window, xpos, ypos);
+}
+
+void processKeyboard (GLFWwindow *window) {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
-
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-		camera.position += camera.up * camera.cameraSpeed;
-	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-		camera.position -= camera.up * camera.cameraSpeed;
-	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-		camera.position -= glm::normalize(glm::cross(camera.front, camera.up)) * camera.cameraSpeed;
-	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-		camera.position += glm::normalize(glm::cross(camera.front, camera.up)) * camera.cameraSpeed;
 	if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
 		camera.position += camera.cameraSpeed * camera.front;
 	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
 		camera.position -= camera.cameraSpeed * camera.front;
-
-	// processMouse(window, lastX, lastY);
+	// if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+	// 	camera.position += camera.up * camera.cameraSpeed;
+	// if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+	// 	camera.position -= camera.up * camera.cameraSpeed;
+	// if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+	// 	camera.position -= glm::normalize(glm::cross(camera.front, camera.up)) * camera.cameraSpeed;
+	// if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+	// 	camera.position += glm::normalize(glm::cross(camera.front, camera.up)) * camera.cameraSpeed;
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+		camera.position -= camera.up * camera.cameraSpeed;
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+		camera.position += camera.up * camera.cameraSpeed;
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+		camera.position += glm::normalize(glm::cross(camera.front, camera.up)) * camera.cameraSpeed;
+	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		camera.position -= glm::normalize(glm::cross(camera.front, camera.up)) * camera.cameraSpeed;
 }
 
 void processMouse(GLFWwindow *window, double xpos, double ypos) {
@@ -243,24 +253,25 @@ void processMouse(GLFWwindow *window, double xpos, double ypos) {
 	lastX = xpos;
 	lastY = ypos;
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS && !io.WantCaptureMouse) {
-
-
-		float sensitivity = 0.1f;
+		float sensitivity = 0.07f;
 
 		xOffset *= sensitivity;
 		yOffset *= sensitivity;
 
-		camera.position += glm::normalize(glm::cross(camera.front, camera.up)) * xOffset;
-		camera.position += camera.up * yOffset;
+		// camera.position += glm::normalize(glm::cross(camera.front, camera.up)) * (xOffset);
+		// camera.position += camera.up * (yOffset);
+
+		camera.position += glm::normalize(glm::cross(camera.front, camera.up)) * (-xOffset);
+		camera.position += camera.up * (-yOffset);
 	} else {
         // Handle zooming with mouse scroll
         // Sensitivity to scroll wheel movement for zooming
         float zoomSensitivity = 1.0f;
 
-        // Update camera zoom based on scroll offset
+        // Update camera position based on scroll offset
         camera.position += camera.front * static_cast<float>(scrollOffset) * zoomSensitivity;
 
-        // Reset scroll offset after using it
+        // Reset scroll offset
         scrollOffset = 0.0;
     }
 }
