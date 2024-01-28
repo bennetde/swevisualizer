@@ -35,7 +35,12 @@ public:
 	/**
 	 * Sets a floating point variable
 	 */
-	void setFloat(const std::string &name, float value) const;
+	void setFloat(const std::string &name, float value) const;\
+
+	/**
+	 * Sets a floating point variable
+	 */
+	void setFloat4(const std::string &name, float value[4]) const;
 
 	/**
 	 * Sets a 4x4 matrix variable

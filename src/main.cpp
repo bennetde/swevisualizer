@@ -161,6 +161,7 @@ int render()
 				}
 				ImGui::EndMenu();
 			}
+#ifdef Debug
 			if (ImGui::BeginMenu("Debug"))
 			{
 				if (ImGui::MenuItem("Toggle Demo Window"))
@@ -169,6 +170,7 @@ int render()
 				}
 				ImGui::EndMenu();
 			}
+#endif
 			if (ImGui::BeginMenu("Camera"))
 			{
 				if (ImGui::MenuItem("Re-center camera"))
@@ -179,8 +181,6 @@ int render()
 				}
 				ImGui::EndMenu();
 			}
-			ImGui::Button("Play");
-			ImGui::Button("Pause");
 			ImGui::Text("MS: %f", deltaTime);
 			ImGui::EndMainMenuBar();
 		}

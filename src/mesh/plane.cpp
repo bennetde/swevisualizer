@@ -4,7 +4,7 @@
 #include <vector>
 
 // TODO: init bathymetry, hu, hv with nX * nY size (like displacements vector)
-Plane::Plane(size_t nX, size_t nY) : _nX(nX), _nY(nY), _renderWireframe(false), _scale(1.0f), displacements(nX * nY), hu(nX * nY), hv(nX * nY), bathymetry(nX * nY)
+Plane::Plane(size_t nX, size_t nY) : _nX(nX), _nY(nY), _renderWireframe(false), _scale(0.3f), displacements(nX * nY), hu(nX * nY), hv(nX * nY), bathymetry(nX * nY)
 {
 	std::vector<float> vertices(nX * nY * 3);
 	std::vector<unsigned int> indices((nX - 1) * (nY - 1) * 2 * 3);
@@ -107,6 +107,8 @@ void Plane::updateBathymetryBuffer()
 void Plane::render(Shader &shader)
 {
 	shader.use();
+
+	shader.setFloat("scale", _scale);
 	glPolygonMode(GL_FRONT_AND_BACK, _renderWireframe ? GL_LINE : GL_FILL);
 	glBindVertexArray(vao);
 	glDrawElements(GL_TRIANGLES, (_nX - 1) * (_nY - 1) * 2 * 3, GL_UNSIGNED_INT, 0);

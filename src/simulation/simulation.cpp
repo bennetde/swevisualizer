@@ -143,7 +143,6 @@ void Simulation::render(Shader &shader)
 	// }
 
 	// eventuell color wheel
-	// ImGui::ColorPicker4("test", );
 	ImGui::End();
 }
 
