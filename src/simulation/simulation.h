@@ -11,6 +11,7 @@ class Simulation
 {
 private:
 	float _curTime;
+	float speed = 1.0f;
 	bool _isPlaying;
 	bool _loaded;
 	float minHeight;

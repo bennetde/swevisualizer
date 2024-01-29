@@ -130,6 +130,7 @@ void Simulation::render(Shader &shader)
 	{
 		shader.setFloat("maxB", maxBathymetry);
 	}
+	ImGui::InputFloat("Simulation speed", &speed);
 	// if (ImGui::Checkbox("hu", &hu))
 	// {
 	// 	shader.setBool("hu", hu);
@@ -157,7 +158,7 @@ void Simulation::update(double deltaTime)
 		return;
 	}
 	// maybe simulation speed variable
-	_curTime += 1;
+	_curTime += 1 * speed;
 
 	if (_curTime >= _fileTimes[_currentFileTimeIndex + 1])
 	{

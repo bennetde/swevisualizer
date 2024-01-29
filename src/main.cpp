@@ -266,7 +266,7 @@ void processMouse(GLFWwindow *window, double xpos, double ypos) {
 	} else {
         // Handle zooming with mouse scroll
         // Sensitivity to scroll wheel movement for zooming
-        float zoomSensitivity = 1.0f;
+        float zoomSensitivity = 5.0f;
 
         // Update camera position based on scroll offset
         camera.position += camera.front * static_cast<float>(scrollOffset) * zoomSensitivity;
