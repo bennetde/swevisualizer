@@ -9,6 +9,8 @@ project(
 
 set(CMAKE_CXX_STANDARD 17)
 find_package(OpenGL REQUIRED)
+find_package(Doxygen
+             OPTIONAL_COMPONENTS mscgen dia)
 #find_package(NetCDF REQUIRED)
 
 ## Include various dependencies using FetchContent

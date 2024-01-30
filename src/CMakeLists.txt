@@ -16,3 +16,5 @@ else() # Linux
 	target_link_libraries(SWEVisualizer PUBLIC netcdf)
 	target_include_directories(SWEVisualizer PUBLIC ${NETCDF_ROOT}/include)
 endif()
+
+doxygen_add_docs(doxygen ${PROJECT_SOURCE_DIR}/src COMMENT "Generate docs")
