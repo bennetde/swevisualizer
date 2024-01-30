@@ -18,7 +18,7 @@ public:
 	std::vector<float> hu;
 	std::vector<float> hv;
 	std::vector<float> bathymetry;
-	Plane(size_t nX, size_t nY);
+	Plane(size_t nX, size_t nY, float cellWidth, float cellHeight);
 	void render(Shader& shader);
 	void updateDisplacementBuffer();
 	void updateHuBuffer();

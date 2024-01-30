@@ -15,7 +15,7 @@ void Simulation::loadSimulation(std::filesystem::path path)
 	_curPath = path;
 
 	// Create Plane with dimensions of the simulation
-	_hPlane = Plane{_reader.getXDimension(), _reader.getYDimension()};
+	_hPlane = Plane{_reader.getXDimension(), _reader.getYDimension(), _reader.getCellWidth(), _reader.getCellHeight()};
 	_loaded = true;
 
 	// Load initial wave heights

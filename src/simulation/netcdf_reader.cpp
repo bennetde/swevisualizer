@@ -266,3 +266,37 @@ void NetCDFReader::getBathymetry(float b[])
         throw std::runtime_error("Could not load b variable");
     }
 }
+
+float NetCDFReader::getX(size_t index) {
+	int retval;
+	if(index < 0 || index >= dimXLength) {
+		throw std::invalid_argument("Index too small or too big");
+	}
+	int xValue;
+	if((retval = nc_get_var1_int(ncid, valXPointer, &index, &xValue))) {
+		throw std::runtime_error("Could not load x value");
+	}
+	return xValue;
+
+}
+
+float NetCDFReader::getY(size_t index) {
+	int retval;
+	if(index < 0 || index >= dimYLength) {
+		throw std::invalid_argument("yIndex too small or too big");
+	}
+	int yValue;
+	if((retval = nc_get_var1_int(ncid, valYPointer, &index, &yValue))) {
+		throw std::runtime_error("Could not load y value");
+	}
+	return yValue;
+}
+
+float NetCDFReader::getCellWidth() {
+	return (getX(1) - getX(0));
+}
+
+float NetCDFReader::getCellHeight() {
+	return (getY(1) - getY(0));
+}
+

@@ -91,4 +91,24 @@ public:
 	 * By accessing the b variable and using nc_get_vara_float to read a variable as fast as possible.
 	*/
 	void getBathymetry(float bathymetry[]);
+
+	/**
+	 * Gets x for a given index. 
+	*/
+	float getX(size_t index);
+
+	/**
+	 * Gets y for given index.
+	*/
+	float getY(size_t index);
+
+	/**
+	 * Calculates the width of a cell. Cell widths are considered to be the same across the entire file.
+	*/
+	float getCellWidth();
+
+	/**
+	 * Calculates the height of a cell. Cell heights are considered to be the same across the entire file.
+	*/
+	float getCellHeight();
 };

@@ -4,19 +4,22 @@
 #include <vector>
 
 // TODO: init bathymetry, hu, hv with nX * nY size (like displacements vector)
-Plane::Plane(size_t nX, size_t nY) : _nX(nX), _nY(nY), _renderWireframe(false), _scale(0.3f), displacements(nX * nY), hu(nX * nY), hv(nX * nY), bathymetry(nX * nY)
+Plane::Plane(size_t nX, size_t nY, float cellWidth, float cellHeight) : _nX(nX), _nY(nY), _renderWireframe(false), _scale(0.3f), displacements(nX * nY), hu(nX * nY), hv(nX * nY), bathymetry(nX * nY)
 {
 	std::vector<float> vertices(nX * nY * 3);
 	std::vector<unsigned int> indices((nX - 1) * (nY - 1) * 2 * 3);
 	// std::cout << (nX-1)*(nY-1)*2*3 << std::endl;
 	size_t index = 0;
 	size_t triangleIndex = 0;
+
+	// calculate aspect ratio to adjust cell widths
+	float aspect = cellWidth / cellHeight;
 	for (size_t i = 0; i < nX * nY; i++)
 	{
 		size_t x = i % nX;
 		size_t y = i / nX;
 		// std::cout << "Adding point i=" << i << " (x=" << x << ", y=" << y << ")\n";
-		vertices[index] = x;
+		vertices[index] = x * aspect;
 		vertices[index + 1] = y;
 		vertices[index + 2] = 0.0f;
 		index += 3;
@@ -118,7 +121,7 @@ void Plane::render(Shader &shader)
 		ImGui::Text("Resolution: %dx%d", _nX, _nY);
 		ImGui::Text("Vertices: %d", _nX * _nY);
 		ImGui::Checkbox("Wireframe", &_renderWireframe);
-		if (ImGui::SliderFloat("Scale", &_scale, 0.0f, 0.3f))
+		if (ImGui::SliderFloat("Scale", &_scale, 0.0f, 0.3f, "%.6f"))
 		{
 			shader.setFloat("scale", _scale);
 		}
