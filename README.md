@@ -42,6 +42,9 @@ Linux: Compile inside the `build` directory using `make`. A executable should ap
 
 Windows: Compile using `cmake --build .` inside the `build` directory. The executable might be hidden under `build\src\Debug\SWEVisualizer.exe`.
 
+## Documentation
+To build the doxygen documentation, build the `doxygen` target.
+On Windows, the output directory might be hidden under `build/src/html`.
 ## Running the Visualizer
 
 1. Make sure you're inside the `build` directory.
