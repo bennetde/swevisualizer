@@ -3,10 +3,11 @@
 #include <optional>
 #include "netcdf_reader.h"
 #include "../mesh/plane.h"
+#include <vector> // Added vector header
+
 // Responsible for holding information about the current state of the simulation
 // (e.g. current sim time, reference to the models that will be updated by the simulation, netcdf-reader, if the simulation
 // is currently paused or playing)
-
 class Simulation
 {
 private:
@@ -22,6 +23,8 @@ private:
 	float maxHv;
 	float minBathymetry;
 	float maxBathymetry;
+	float color[4];
+	
 	bool hu = false;
 	bool hv = false;
 	bool h = true;
