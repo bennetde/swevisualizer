@@ -131,15 +131,6 @@ void Simulation::render(Shader &shader)
 		shader.setFloat("maxB", maxBathymetry);
 	}
 
-	// if (ImGui::ColorEdit4("Color", color))
-	// {
-	// 	shader.setFloat4("color", color);
-	// }
-
-	if (ImGui::ColorPicker4("Color", color))
-	{
-		shader.setFloat4("color", color);
-	}
 	ImGui::InputFloat("Simulation speed", &speed);
 	// if (ImGui::Checkbox("hu", &hu))
 	// {
@@ -152,6 +143,16 @@ void Simulation::render(Shader &shader)
 	// if(ImGui::Checkbox("h", &h)) {
 	// 	shader.setBool("h", h);
 	// }
+
+	// if (ImGui::ColorEdit4("Color", color))
+	// {
+	// 	shader.setFloat4("color", color);
+	// }
+
+	if (ImGui::ColorPicker4("Color", color))
+	{
+		shader.setFloat4("color", color);
+	}
 
 	// eventuell color wheel
 	ImGui::End();
