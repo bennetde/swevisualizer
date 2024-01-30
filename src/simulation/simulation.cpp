@@ -53,7 +53,16 @@ void Simulation::render(Shader &shader)
 	{
 		_hPlane.value().render(shader);
 	}
-
+	//braucht es hier einen if else block?
+	if (userColorChanged)
+	{
+		shader.setFloat4("userColor", userColor);
+		shader.setBool("userColorChanged", true);
+	} 
+	// else {
+	// 	shader.setBool("userColorChanged", false);
+	// }
+	
 	shader.setFloat("minHeight", minHeight);
 	shader.setFloat("maxHeight", maxHeight);
 	shader.setFloat("minHu", minHu);
@@ -149,9 +158,10 @@ void Simulation::render(Shader &shader)
 	// 	shader.setFloat4("color", color);
 	// }
 
-	if (ImGui::ColorPicker4("Color", color))
+	if (ImGui::ColorPicker4("Color", userColor))
 	{
-		shader.setFloat4("color", color);
+		// shader.setFloat4("color", userColor);
+		userColorChanged = true;
 	}
 
 	// eventuell color wheel

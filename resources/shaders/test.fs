@@ -19,10 +19,15 @@ uniform float maxBathymetry;
 uniform bool hu;
 uniform bool hv;
 uniform bool h;
+uniform vec4 userColor;
+uniform bool useUserColor;
 void main()
-{
+{	
 	vec4 minCol = vec4(0.5, 0.7,0.8,1.0);
 	vec4 maxCol = vec4(0.0, 0.0,1.0,1.0);
+	//Farbe des Users wird verwendet
+	vec4 baseColor = useUserColor ? userColor : minCol;
+	
 
 	vec4 minhuCol = vec4(0.2, 0.0,0.0,1.0);
 	vec4 maxhuCol = vec4(0.5, 0.0,0.0,1.0);
@@ -36,7 +41,8 @@ void main()
 	// float new_val01 = clamp(t, 0.0, 1.0);
 
 	//mix (https://registry.khronos.org/OpenGL-Refpages/gl4/html/mix.xhtml)
-	vec4 mycol = mix(minCol, maxCol, new_val01);
+	//vec4 mycol = mix(minCol, maxCol, new_val01);
+	vec4 mycol = mix(baseColor, maxCol, new_val01);
 	// mycol.r = o_hu;
 	// mycol.g = o_hv;
 	// vec4 col = vec4(0.0f);

@@ -23,7 +23,8 @@ private:
 	float maxHv;
 	float minBathymetry;
 	float maxBathymetry;
-	float color[4];
+	float userColor[4];
+	bool userColorChanged = false;
 	
 	bool hu = false;
 	bool hv = false;
