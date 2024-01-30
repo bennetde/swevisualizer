@@ -1,5 +1,13 @@
 A OpenGL visualizer for shallow water equations.
 
+![A screenshot of the software should appear here](screenshots/SWEVisualizer_Chile.png)
+
+# Features
+- [x] Easy loading of NetCDF simulation files
+- [x] Fast configuration of display settings
+- [x] Move around the simulation plane in a intuitive way using your mouse or keyboard
+- [x] Adjust playback settings (simulation speed, reverse, pause, etc.)
+
 # Dependencies
 
 - OpenGL
@@ -10,6 +18,7 @@ A OpenGL visualizer for shallow water equations.
 - [Catch2](https://github.com/catchorg/Catch2)
 - NetCDF
 - [ImGuiFileDialog](https://github.com/aiekick/ImGuiFileDialog)
+- Doxygen
 
 All dependencies other than OpenGL should be resolved by CMake itself.
 
