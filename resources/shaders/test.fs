@@ -51,7 +51,7 @@ void main()
 	// col = vec4(o_displ / 100.0f);
 	//FragColor = mycol;
 	
-	float huAlpha = smoothstep(minHu, maxHu, o_hu);
+	float huAlpha = smoothstep(minHu, maxHu, abs(o_hu));
 	vec4 huLayer = mix(minhuCol, maxhuCol, huAlpha);
 	FragColor = mix(mycol, huLayer, huAlpha);
 	// FragColor = mix(mycol, huLayer, 1.0);
