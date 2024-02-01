@@ -32,6 +32,9 @@ void main()
 	vec4 minhuCol = vec4(0.2, 0.0,0.0,1.0);
 	vec4 maxhuCol = vec4(0.5, 0.0,0.0,1.0);
 
+	vec4 minhvCol = vec4(0.2, 0.0,0.0,1.0);
+	vec4 maxhvCol = vec4(0.5, 0.0,0.0,1.0);
+
 	
 	//muss noch überarbeitet werden, eventuell werden minHeight und maxHeight nicht neu gesetzt
 	// smoothstep (http://www.fundza.com/rman_shaders/smoothstep/)
@@ -51,11 +54,18 @@ void main()
 	// col = vec4(o_displ / 100.0f);
 	//FragColor = mycol;
 	
-	float huAlpha = smoothstep(minHu, maxHu, abs(o_hu));
-	vec4 huLayer = mix(minhuCol, maxhuCol, huAlpha);
-	FragColor = mix(mycol, huLayer, huAlpha);
-	// FragColor = mix(mycol, huLayer, 1.0);
-   
+	// if (hv) {
+	// 	float hvAlpha = smoothstep(minHv, maxHv, abs(o_hv));
+	// 	vec4 hvLayer = mix(minhvCol, maxhvCol, hvAlpha);
+	// 	FragColor = mix(mycol, hvLayer, hvAlpha);
+	// }
+	// else {
+		float huAlpha = smoothstep(minHu, maxHu, abs(o_hu));
+		vec4 huLayer = mix(minhuCol, maxhuCol, huAlpha);
+		FragColor = mix(mycol, huLayer, huAlpha);
+		// FragColor = mix(mycol, huLayer, 1.0);
+	// }
+	   
 	vec4 minBathymetryCol = vec4(0.0, 0.5, 0.0, 1.0);
 	vec4 maxBathymetryCol = vec4(0.4, 0.2, 0.0, 1.0);
 	if(o_bathymetry > 0.0) {

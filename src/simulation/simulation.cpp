@@ -145,13 +145,15 @@ void Simulation::render(Shader &shader)
 	// {
 	// 	shader.setBool("hu", hu);
 	// }
-	// if (ImGui::Checkbox("hv", &hv))
-	// {
-	// 	shader.setBool("hv", hv);
-	// }
+	if (ImGui::Checkbox("hv", &hv))
+	{
+		shader.setBool("hv", hv);
+	}
 	// if(ImGui::Checkbox("h", &h)) {
 	// 	shader.setBool("h", h);
 	// }
+
+	ImGui::Checkbox("reverse", &reverse);
 
 	// if (ImGui::ColorEdit4("Color", color))
 	// {
@@ -173,28 +175,55 @@ void Simulation::update(double deltaTime)
 	if (!_isPlaying || !_loaded)
 		return;
 
-	if (_currentFileTimeIndex == _fileTimes.size() - 1)
+	if (_currentFileTimeIndex == _fileTimes.size() - 1 && !reverse)
 	{
 		pause();
 		return;
 	}
-	// maybe simulation speed variable
-	_curTime += 1 * speed;
 
-	if (_curTime >= _fileTimes[_currentFileTimeIndex + 1])
-	{
-		// Load displacement
-		_reader.getHeightsForTimeStep(_currentFileTimeIndex + 1, _hPlane.value().displacements.data());
-		_hPlane.value().updateDisplacementBuffer();
-		// Load hu
-		_reader.getHorizontalMomentumForTimeStep(_currentFileTimeIndex + 1, _hPlane.value().hu.data());
-		_hPlane.value().updateHuBuffer();
-		// Load hv
-		_reader.getVerticalMomentumForTimeStep(_currentFileTimeIndex + 1, _hPlane.value().hv.data());
-		_hPlane.value().updateHvBuffer();
-
-		_currentFileTimeIndex++;
+	if (_currentFileTimeIndex == -1 && reverse) {
+		pause();
+		return;
 	}
+	
+	if (reverse) {
+		_curTime -= 1 * speed;
+	}
+	else {
+		_curTime += 1 * speed;
+	}
+
+	if (reverse) {
+		if (_curTime <= _fileTimes[_currentFileTimeIndex]) {
+			// Load displacement
+			_reader.getHeightsForTimeStep(_currentFileTimeIndex, _hPlane.value().displacements.data());
+			_hPlane.value().updateDisplacementBuffer();
+			// Load hu
+			_reader.getHorizontalMomentumForTimeStep(_currentFileTimeIndex, _hPlane.value().hu.data());
+			_hPlane.value().updateHuBuffer();
+			// Load hv
+			_reader.getVerticalMomentumForTimeStep(_currentFileTimeIndex, _hPlane.value().hv.data());
+			_hPlane.value().updateHvBuffer();
+
+			_currentFileTimeIndex--;
+		}
+	}
+
+	else {
+		if (_curTime >= _fileTimes[_currentFileTimeIndex + 1]) {
+			// Load displacement
+			_reader.getHeightsForTimeStep(_currentFileTimeIndex + 1, _hPlane.value().displacements.data());
+			_hPlane.value().updateDisplacementBuffer();
+			// Load hu
+			_reader.getHorizontalMomentumForTimeStep(_currentFileTimeIndex + 1, _hPlane.value().hu.data());
+			_hPlane.value().updateHuBuffer();
+			// Load hv
+			_reader.getVerticalMomentumForTimeStep(_currentFileTimeIndex + 1, _hPlane.value().hv.data());
+			_hPlane.value().updateHvBuffer();
+
+			_currentFileTimeIndex++;
+		}
+	}	
 }
 
 void Simulation::play()
