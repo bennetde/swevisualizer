@@ -77,6 +77,31 @@ Shader::Shader(const std::filesystem::path& vertexPath, const std::filesystem::p
 	// Delete unused shaders
 	glDeleteShader(vertexId);
 	glDeleteShader(fragmentId);
+
+	void standardColors();
+		
+}
+
+void Shader::standardColors() {
+	// Set default uniform values
+	float minCol[4] = {0.5f, 0.7f, 0.8f, 1.0f};
+	float maxCol[4] = {0.0f, 0.0f, 1.0f, 1.0f};
+	float minhuCol[4] = {0.2f, 0.0f, 0.0f, 1.0f};
+	float maxhuCol[4] = {0.5f, 0.0f, 0.0f, 1.0f};
+	float minhvCol[4] = {0.2f, 0.0f, 0.0f, 1.0f};
+	float maxhvCol[4] = {0.5f, 0.0f, 0.0f, 1.0f};
+	float minBathymetryCol[4] = {0.0f, 0.5f, 0.0f, 1.0f};
+	float maxBathymetryCol[4] = {0.4f, 0.2f, 0.0f, 1.0f};
+	
+	use();	
+	setFloat4("minCol", minCol);
+	setFloat4("maxCol", maxCol);
+	setFloat4("minhuCol", minhuCol);
+	setFloat4("maxhuCol", maxhuCol);
+	setFloat4("minhvCol", minhvCol);
+	setFloat4("maxhvCol", maxhvCol);
+	setFloat4("minBathymetryCol", minBathymetryCol);
+	setFloat4("maxBathymetryCol", maxBathymetryCol);
 }
 
 void Shader::use() const {

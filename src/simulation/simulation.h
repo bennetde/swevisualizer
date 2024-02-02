@@ -23,8 +23,16 @@ private:
 	float maxHv;
 	float minBathymetry;
 	float maxBathymetry;
-	float userColor[4];
-	bool userColorChanged = false;
+
+	bool colorSettings;
+	float minCol[4];
+	float maxCol[4];
+	float minhuCol[4];
+	float maxhuCol[4];
+	float minhvCol[4];
+	float maxhvCol[4];
+	float minBathymetryCol[4];
+	float maxBathymetryCol[4];
 	
 	bool hu = false;
 	bool hv = false;
@@ -48,4 +56,5 @@ public:
 
 	void update(double deltaTime);
 	void render(Shader &shader);
+	void colorSettingsWindow(Shader &shader);
 };

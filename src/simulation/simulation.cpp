@@ -43,26 +43,19 @@ void Simulation::loadSimulation(std::filesystem::path path)
 	// Set Time
 	_fileTimes = _reader.getTimeSteps();
 
+
 	_maxFileTimeIndex = _fileTimes[_fileTimes.size() - 1];
 	_currentFileTimeIndex = 0;
 	reset();
 }
 
 void Simulation::render(Shader &shader)
-{
+{	
+
 	if (_hPlane.has_value())
 	{
 		_hPlane.value().render(shader);
 	}
-	//braucht es hier einen if else block?
-	if (userColorChanged)
-	{
-		shader.setFloat4("userColor", userColor);
-		shader.setBool("userColorChanged", true);
-	} 
-	// else {
-	// 	shader.setBool("userColorChanged", false);
-	// }
 	
 	shader.setFloat("minHeight", minHeight);
 	shader.setFloat("maxHeight", maxHeight);
@@ -75,6 +68,8 @@ void Simulation::render(Shader &shader)
 	shader.setBool("hv", hu);
 	shader.setBool("hv", hv);
 	shader.setBool("hv", h);
+
+	
 
 	if (ImGui::Begin("Simulation Settings"))
 	{
@@ -156,18 +151,121 @@ void Simulation::render(Shader &shader)
 
 	ImGui::Checkbox("reverse", &reverse);
 
+	if (ImGui::Button("Color Settings")) {
+		colorSettings = true;
+	
+	}
+
+	if (colorSettings) {
+		colorSettingsWindow(shader);
+	}
+	// if (ImGui::CollapsingHeader("Color Settings"))
+	// {
+	// 	if (ImGui::ColorPicker4("minColor", minCol))
+	// 	{
+	// 		shader.setFloat4("minCol", minCol);
+	// 	}
+
+	// 	if (ImGui::ColorPicker4("maxColor", maxCol))
+	// 	{
+	// 		shader.setFloat4("maxCol", maxCol);
+	// 	}
+
+	// 	if (ImGui::ColorPicker4("minHuColor", minhuCol))
+	// 	{
+	// 		shader.setFloat4("minhuCol", minhuCol);
+	// 	}
+
+	// 	if (ImGui::ColorPicker4("maxHuColor", maxhuCol))
+	// 	{
+	// 		shader.setFloat4("maxhuCol", maxhuCol);
+	// 	}
+
+	// 	if (ImGui::ColorPicker4("minHvColor", minhvCol)) 
+	// 	{
+	// 		shader.setFloat4("minhvCol", minhvCol);
+	// 	}
+
+	// 	if (ImGui::ColorPicker4("maxHvColor", maxhvCol))
+	// 	{
+	// 		shader.setFloat4("maxhvCol", maxhvCol);
+	// 	}
+
+	// 	if (ImGui::ColorPicker4("minBathymetryColor", minBathymetryCol))
+	// 	{
+	// 		shader.setFloat4("minBathymetryCol", minBathymetryCol);
+	// 	}
+
+	// 	if (ImGui::ColorPicker4("maxBathymetryColor", maxBathymetryCol))
+	// 	{
+	// 		shader.setFloat4("maxBathymetryCol", maxBathymetryCol);
+	// 	}
+
+	// }
+
 	// if (ImGui::ColorEdit4("Color", color))
 	// {
 	// 	shader.setFloat4("color", color);
 	// }
 
-	if (ImGui::ColorPicker4("Color", userColor))
-	{
-		// shader.setFloat4("color", userColor);
-		userColorChanged = true;
-	}
+	// if (ImGui::ColorPicker4("color", userColor))
+	// {
+	// 	shader.setFloat4("color", userColor);
+	// }
 
 	// eventuell color wheel
+	ImGui::End();
+}
+
+void Simulation::colorSettingsWindow(Shader &shader) {
+	if (ImGui::Begin("Color Settings")) {
+		if (ImGui::Button("reset")) {
+			shader.standardColors();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Close")) {
+			colorSettings = false;
+		}
+		if (ImGui::ColorPicker4("minColor", minCol))
+		{
+			shader.setFloat4("minCol", minCol);
+		}
+
+		if (ImGui::ColorPicker4("maxColor", maxCol))
+		{
+			shader.setFloat4("maxCol", maxCol);
+		}
+
+		if (ImGui::ColorPicker4("minHuColor", minhuCol))
+		{
+			shader.setFloat4("minhuCol", minhuCol);
+		}
+
+		if (ImGui::ColorPicker4("maxHuColor", maxhuCol))
+		{
+			shader.setFloat4("maxhuCol", maxhuCol);
+		}
+
+		if (ImGui::ColorPicker4("minHvColor", minhvCol)) 
+		{
+			shader.setFloat4("minhvCol", minhvCol);
+		}
+
+		if (ImGui::ColorPicker4("maxHvColor", maxhvCol))
+		{
+			shader.setFloat4("maxhvCol", maxhvCol);
+		}
+
+		if (ImGui::ColorPicker4("minBathymetryColor", minBathymetryCol))
+		{
+			shader.setFloat4("minBathymetryCol", minBathymetryCol);
+		}
+
+		if (ImGui::ColorPicker4("maxBathymetryColor", maxBathymetryCol))
+		{
+			shader.setFloat4("maxBathymetryCol", maxBathymetryCol);
+		}
+	}
 	ImGui::End();
 }
 
