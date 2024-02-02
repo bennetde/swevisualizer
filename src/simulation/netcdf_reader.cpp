@@ -1,6 +1,7 @@
 #include "netcdf_reader.h"
 #include <netcdf.h>
 #include <iostream>
+#include <algorithm>
 // TODO: Implementation of the reader
 
 void NetCDFReader::open(std::filesystem::path filePath)

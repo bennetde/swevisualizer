@@ -1,5 +1,6 @@
 #include "simulation.h"
 #include <imgui.h>
+#include <algorithm>
 
 // Simulation::Simulation() {
 
