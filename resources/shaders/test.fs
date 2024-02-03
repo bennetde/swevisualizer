@@ -52,6 +52,7 @@ void main()
 	//mix (https://registry.khronos.org/OpenGL-Refpages/gl4/html/mix.xhtml)
 	//vec4 mycol = mix(minCol, maxCol, new_val01);
 	vec4 mycol = mix(minCol, maxCol, new_val01);
+	// FragColor = mycol;
 	// mycol.r = o_hu;
 	// mycol.g = o_hv;
 	// vec4 col = vec4(0.0f);
