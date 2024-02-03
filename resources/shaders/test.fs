@@ -60,17 +60,24 @@ void main()
 	// col = vec4(o_displ / 100.0f);
 	//FragColor = mycol;
 	
-	if (bool_hv) {
-		float hvAlpha = smoothstep(minHv, maxHv, abs(o_hv));
-		vec4 hvLayer = mix(minhvCol, maxhvCol, hvAlpha);
-		FragColor = mix(mycol, hvLayer, hvAlpha);
-	}
-	else {
-		float huAlpha = smoothstep(minHu, maxHu, abs(o_hu));
-		vec4 huLayer = mix(minhuCol, maxhuCol, huAlpha);
-		FragColor = mix(mycol, huLayer, huAlpha);
-		// FragColor = mix(mycol, huLayer, 1.0);
-	}
+	// if (bool_hv) {
+	// 	float hvAlpha = smoothstep(minHv, maxHv, abs(o_hv));
+	// 	vec4 hvLayer = mix(minhvCol, maxhvCol, hvAlpha);
+	// 	FragColor = mix(mycol, hvLayer, hvAlpha);
+	// }
+	// else {
+	// 	float huAlpha = smoothstep(minHu, maxHu, abs(o_hu));
+	// 	vec4 huLayer = mix(minhuCol, maxhuCol, huAlpha);
+	// 	FragColor = mix(mycol, huLayer, huAlpha);
+	// 	// FragColor = mix(mycol, huLayer, 1.0);
+	// }
+
+	// Altenratively to above, this could show hu and hv at once
+	float speed = length(vec2(o_hu, o_hv));
+	float huAlpha = smoothstep(minHu, maxHu, abs(speed));
+	vec4 huLayer = mix(minhuCol, maxhuCol, huAlpha);
+	FragColor = mix(mycol, huLayer, huAlpha);
+
 	   
 	// vec4 minBathymetryCol = vec4(0.0, 0.5, 0.0, 1.0);
 	// vec4 maxBathymetryCol = vec4(0.4, 0.2, 0.0, 1.0);
