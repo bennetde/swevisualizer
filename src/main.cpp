@@ -308,8 +308,8 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 // ---------------------------------------------------------------------------------------------
 void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
-	// make sure the viewport matches the new window dimensions; note that width and
-	// height will be significantly larger than specified on retina displays.
+	// We ignore the callback when the window is minimized, to avoid the program crashing to due to a 0/0 aspect ratio.
+	if(width == 0 || height == 0) return;
 	glViewport(0, 0, width, height);
 	SCR_WIDTH = width;
 	SCR_HEIGHT = height;
