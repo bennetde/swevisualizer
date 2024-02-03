@@ -144,7 +144,7 @@ int render()
 				if (ImGuiFileDialog::Instance()->IsOk())
 				{
 					std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-					sim.loadSimulation(filePathName);
+					sim.loadSimulation(filePathName, shader);
 				}
 
 				ImGuiFileDialog::Instance()->Close();
@@ -180,6 +180,27 @@ int render()
 					camera.up = camera.originalUp;
 				}
 				ImGui::EndMenu();
+			}
+
+			if(ImGui::BeginMenu("Settings")) {
+				if(ImGui::MenuItem("Simulation Settings")) {
+					sim.openSettingsWindow();
+				}
+				if(ImGui::MenuItem("Color Settings")) {
+					sim.openColorSettingsWindow();
+				}
+				ImGui::EndMenu();
+			}
+
+			if(ImGui::Button(sim.isPlaying() ? "Pause" : "Play")) {
+				if(sim.isPlaying()) {
+					sim.pause();
+				} else {
+					sim.play();
+				}
+			}
+			if(ImGui::Button("Reset")) {
+				sim.reset();
 			}
 			ImGui::Text("MS: %f", deltaTime);
 			ImGui::EndMainMenuBar();

@@ -24,6 +24,7 @@ private:
 	float minBathymetry;
 	float maxBathymetry;
 
+	bool _showSimulationSettingsWindow = false;
 	bool colorSettings;
 	float minCol[4];
 	float maxCol[4];
@@ -49,7 +50,7 @@ private:
 
 public:
 	// Simulation();
-	void loadSimulation(std::filesystem::path path);
+	void loadSimulation(std::filesystem::path path, Shader& shader);
 	void play();
 	void pause();
 	void reset();
@@ -57,4 +58,12 @@ public:
 	void update(double deltaTime);
 	void render(Shader &shader);
 	void colorSettingsWindow(Shader &shader);
+
+	void openSettingsWindow();
+	void closeSettingsWindow();
+
+	void openColorSettingsWindow();
+	void closeColorSettingsWindow();
+
+	bool isPlaying();
 };

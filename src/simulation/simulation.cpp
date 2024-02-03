@@ -1,11 +1,12 @@
 #include "simulation.h"
 #include <imgui.h>
 #include <algorithm>
+#include <iostream>
 
 // Simulation::Simulation() {
 
 // }
-void Simulation::loadSimulation(std::filesystem::path path)
+void Simulation::loadSimulation(std::filesystem::path path, Shader& shader)
 {
 	if (_loaded)
 	{
@@ -43,20 +44,21 @@ void Simulation::loadSimulation(std::filesystem::path path)
 	// Set Time
 	_fileTimes = _reader.getTimeSteps();
 
-
 	_maxFileTimeIndex = _fileTimes[_fileTimes.size() - 1];
 	_currentFileTimeIndex = 0;
 	reset();
+
+	openSettingsWindow();
 }
 
 void Simulation::render(Shader &shader)
-{	
+{
 
 	if (_hPlane.has_value())
 	{
 		_hPlane.value().render(shader);
 	}
-	
+
 	shader.setFloat("minHeight", minHeight);
 	shader.setFloat("maxHeight", maxHeight);
 	shader.setFloat("minHu", minHu);
@@ -69,163 +71,118 @@ void Simulation::render(Shader &shader)
 	shader.setBool("hv", hv);
 	shader.setBool("hv", h);
 
-	
-
-	if (ImGui::Begin("Simulation Settings"))
+	if (_showSimulationSettingsWindow)
 	{
-		if (_curPath.has_value())
+		if (ImGui::Begin("Simulation Settings", &_showSimulationSettingsWindow))
 		{
-			ImGui::Text("Current Path: %s", _curPath.value().string().data());
+			if (_curPath.has_value())
+			{
+				ImGui::Text("Current Path: %s", _curPath.value().string().data());
+			}
+			else
+			{
+				ImGui::Text("No file loaded");
+			}
+
+			ImGui::Text("SimTime: %f", this->_curTime);
+			if (ImGui::Button(_isPlaying ? "Pause" : "Play"))
+			{
+				if (_isPlaying)
+				{
+					pause();
+				}
+				else
+				{
+					play();
+				}
+			}
+			ImGui::SameLine();
+			// bool t = true;
+			// ImGui::Checkbox("Reverse", &t);
+			ImGui::SameLine();
+			if (ImGui::Button("Reset"))
+			{
+				reset();
+			}
+
+			if (ImGui::InputFloat("Minimum Height Value", &minHeight))
+			{
+				shader.setFloat("minHeight", minHeight);
+			}
+			if (ImGui::InputFloat("Maximum Height Value", &maxHeight))
+			{
+				shader.setFloat("maxHeight", maxHeight);
+			}
+			if (ImGui::InputFloat("Minimum Hu Value", &minHu))
+			{
+				shader.setFloat("minHu", minHu);
+			}
+			if (ImGui::InputFloat("Maximum Hu Value", &maxHu))
+			{
+				shader.setFloat("maxHu", maxHu);
+			}
+			if (ImGui::InputFloat("Minimum Hv Value", &minHv))
+			{
+				shader.setFloat("minHv", minHv);
+			}
+			if (ImGui::InputFloat("Maximum Hv Value", &maxHv))
+			{
+				shader.setFloat("maxHv", maxHv);
+			}
+			if (ImGui::InputFloat("Minimum B Value", &minBathymetry))
+			{
+				shader.setFloat("minBathymetry", minBathymetry);
+			}
+			if (ImGui::InputFloat("Maximum B Value", &maxBathymetry))
+			{
+				shader.setFloat("maxB", maxBathymetry);
+			}
+
+			ImGui::InputFloat("Simulation speed", &speed);
+			// if (ImGui::Checkbox("hu", &hu))
+			// {
+			// 	shader.setBool("hu", hu);
+			// }
+			if (ImGui::Checkbox("hv", &hv))
+			{
+				shader.setBool("bool_hv", hv);
+			}
+			// if(ImGui::Checkbox("h", &h)) {
+			// 	shader.setBool("h", h);
+			// }
+
+			ImGui::Checkbox("reverse", &reverse);
+
+			if (ImGui::Button("Color Settings"))
+			{
+				colorSettings = true;
+			}
 		}
-		else
-		{
-			ImGui::Text("No file loaded");
-		}
-	}
-	ImGui::Text("SimTime: %f", this->_curTime);
-	if (ImGui::Button(_isPlaying ? "Pause" : "Play"))
-	{
-		if (_isPlaying)
-		{
-			pause();
-		}
-		else
-		{
-			play();
-		}
-	}
-	ImGui::SameLine();
-	// bool t = true;
-	// ImGui::Checkbox("Reverse", &t);
-	ImGui::SameLine();
-	if (ImGui::Button("Reset"))
-	{
-		reset();
+		ImGui::End();
 	}
 
-	if (ImGui::InputFloat("Minimum Height Value", &minHeight))
+	if (colorSettings)
 	{
-		shader.setFloat("minHeight", minHeight);
-	}
-	if (ImGui::InputFloat("Maximum Height Value", &maxHeight))
-	{
-		shader.setFloat("maxHeight", maxHeight);
-	}
-	if (ImGui::InputFloat("Minimum Hu Value", &minHu))
-	{
-		shader.setFloat("minHu", minHu);
-	}
-	if (ImGui::InputFloat("Maximum Hu Value", &maxHu))
-	{
-		shader.setFloat("maxHu", maxHu);
-	}
-	if (ImGui::InputFloat("Minimum Hv Value", &minHv))
-	{
-		shader.setFloat("minHv", minHv);
-	}
-	if (ImGui::InputFloat("Maximum Hv Value", &maxHv))
-	{
-		shader.setFloat("maxHv", maxHv);
-	}
-	if (ImGui::InputFloat("Minimum B Value", &minBathymetry))
-	{
-		shader.setFloat("minBathymetry", minBathymetry);
-	}
-	if (ImGui::InputFloat("Maximum B Value", &maxBathymetry))
-	{
-		shader.setFloat("maxB", maxBathymetry);
-	}
-
-	ImGui::InputFloat("Simulation speed", &speed);
-	// if (ImGui::Checkbox("hu", &hu))
-	// {
-	// 	shader.setBool("hu", hu);
-	// }
-	if (ImGui::Checkbox("hv", &hv))
-	{
-		shader.setBool("hv", hv);
-	}
-	// if(ImGui::Checkbox("h", &h)) {
-	// 	shader.setBool("h", h);
-	// }
-
-	ImGui::Checkbox("reverse", &reverse);
-
-	if (ImGui::Button("Color Settings")) {
-		colorSettings = true;
-	
-	}
-
-	if (colorSettings) {
 		colorSettingsWindow(shader);
 	}
-	// if (ImGui::CollapsingHeader("Color Settings"))
-	// {
-	// 	if (ImGui::ColorPicker4("minColor", minCol))
-	// 	{
-	// 		shader.setFloat4("minCol", minCol);
-	// 	}
-
-	// 	if (ImGui::ColorPicker4("maxColor", maxCol))
-	// 	{
-	// 		shader.setFloat4("maxCol", maxCol);
-	// 	}
-
-	// 	if (ImGui::ColorPicker4("minHuColor", minhuCol))
-	// 	{
-	// 		shader.setFloat4("minhuCol", minhuCol);
-	// 	}
-
-	// 	if (ImGui::ColorPicker4("maxHuColor", maxhuCol))
-	// 	{
-	// 		shader.setFloat4("maxhuCol", maxhuCol);
-	// 	}
-
-	// 	if (ImGui::ColorPicker4("minHvColor", minhvCol)) 
-	// 	{
-	// 		shader.setFloat4("minhvCol", minhvCol);
-	// 	}
-
-	// 	if (ImGui::ColorPicker4("maxHvColor", maxhvCol))
-	// 	{
-	// 		shader.setFloat4("maxhvCol", maxhvCol);
-	// 	}
-
-	// 	if (ImGui::ColorPicker4("minBathymetryColor", minBathymetryCol))
-	// 	{
-	// 		shader.setFloat4("minBathymetryCol", minBathymetryCol);
-	// 	}
-
-	// 	if (ImGui::ColorPicker4("maxBathymetryColor", maxBathymetryCol))
-	// 	{
-	// 		shader.setFloat4("maxBathymetryCol", maxBathymetryCol);
-	// 	}
-
-	// }
-
-	// if (ImGui::ColorEdit4("Color", color))
-	// {
-	// 	shader.setFloat4("color", color);
-	// }
-
-	// if (ImGui::ColorPicker4("color", userColor))
-	// {
-	// 	shader.setFloat4("color", userColor);
-	// }
-
-	// eventuell color wheel
-	ImGui::End();
 }
 
-void Simulation::colorSettingsWindow(Shader &shader) {
-	if (ImGui::Begin("Color Settings")) {
-		if (ImGui::Button("reset")) {
-			shader.standardColors();
+void Simulation::colorSettingsWindow(Shader &shader)
+{
+	if (ImGui::Begin("Color Settings", &colorSettings))
+	{
+		if (ImGui::Button("Reset"))
+		{
+			shader.setFloat4("minCol", minCol);
+			shader.setFloat4("maxCol", maxCol);
+			shader.setFloat4("minhuCol", minhuCol);
+			shader.setFloat4("maxhuCol", maxhuCol);
+			shader.setFloat4("minhvCol", minhvCol);
+			shader.setFloat4("maxhvCol", maxhvCol);
+			shader.setFloat4("minBathymetryCol", minBathymetryCol);
+			shader.setFloat4("maxBathymetryCol", maxBathymetryCol);
 		}
 		ImGui::SameLine();
-		if (ImGui::Button("Close")) {
-			colorSettings = false;
-		}
 		if (ImGui::ColorPicker4("minColor", minCol))
 		{
 			shader.setFloat4("minCol", minCol);
@@ -246,7 +203,7 @@ void Simulation::colorSettingsWindow(Shader &shader) {
 			shader.setFloat4("maxhuCol", maxhuCol);
 		}
 
-		if (ImGui::ColorPicker4("minHvColor", minhvCol)) 
+		if (ImGui::ColorPicker4("minHvColor", minhvCol))
 		{
 			shader.setFloat4("minhvCol", minhvCol);
 		}
@@ -280,20 +237,25 @@ void Simulation::update(double deltaTime)
 		return;
 	}
 
-	if (_currentFileTimeIndex == -1 && reverse) {
+	if (_currentFileTimeIndex == -1 && reverse)
+	{
 		pause();
 		return;
 	}
-	
-	if (reverse) {
+
+	if (reverse)
+	{
 		_curTime -= 1 * speed;
 	}
-	else {
+	else
+	{
 		_curTime += 1 * speed;
 	}
 
-	if (reverse) {
-		if (_curTime <= _fileTimes[_currentFileTimeIndex]) {
+	if (reverse)
+	{
+		if (_curTime <= _fileTimes[_currentFileTimeIndex])
+		{
 			// Load displacement
 			_reader.getHeightsForTimeStep(_currentFileTimeIndex, _hPlane.value().displacements.data());
 			_hPlane.value().updateDisplacementBuffer();
@@ -308,8 +270,10 @@ void Simulation::update(double deltaTime)
 		}
 	}
 
-	else {
-		if (_curTime >= _fileTimes[_currentFileTimeIndex + 1]) {
+	else
+	{
+		if (_curTime >= _fileTimes[_currentFileTimeIndex + 1])
+		{
 			// Load displacement
 			_reader.getHeightsForTimeStep(_currentFileTimeIndex + 1, _hPlane.value().displacements.data());
 			_hPlane.value().updateDisplacementBuffer();
@@ -322,7 +286,7 @@ void Simulation::update(double deltaTime)
 
 			_currentFileTimeIndex++;
 		}
-	}	
+	}
 }
 
 void Simulation::play()
@@ -344,4 +308,26 @@ void Simulation::reset()
 	_curTime = 0.0f;
 	_currentFileTimeIndex = 0;
 	_isPlaying = false;
+}
+
+void Simulation::openSettingsWindow()
+{
+	_showSimulationSettingsWindow = true;
+}
+
+void Simulation::closeSettingsWindow()
+{
+	_showSimulationSettingsWindow = false;
+}
+
+bool Simulation::isPlaying() {
+	return _isPlaying;
+}
+
+void Simulation::openColorSettingsWindow() {
+	colorSettings = true;
+}
+
+void Simulation::closeColorSettingsWindow() {
+	colorSettings = false;
 }

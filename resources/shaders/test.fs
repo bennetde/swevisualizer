@@ -16,8 +16,8 @@ uniform float minHv;
 uniform float maxHv;
 uniform float minBathymetry;
 uniform float maxBathymetry;
-uniform bool hu;
-uniform bool hv;
+uniform bool bool_hu;
+uniform bool bool_hv;
 uniform bool h;
 uniform vec4 minCol;
 uniform vec4 maxCol;
@@ -60,17 +60,17 @@ void main()
 	// col = vec4(o_displ / 100.0f);
 	//FragColor = mycol;
 	
-	// if (hv) {
-	// 	float hvAlpha = smoothstep(minHv, maxHv, abs(o_hv));
-	// 	vec4 hvLayer = mix(minhvCol, maxhvCol, hvAlpha);
-	// 	FragColor = mix(mycol, hvLayer, hvAlpha);
-	// }
-	// else {
+	if (bool_hv) {
+		float hvAlpha = smoothstep(minHv, maxHv, abs(o_hv));
+		vec4 hvLayer = mix(minhvCol, maxhvCol, hvAlpha);
+		FragColor = mix(mycol, hvLayer, hvAlpha);
+	}
+	else {
 		float huAlpha = smoothstep(minHu, maxHu, abs(o_hu));
 		vec4 huLayer = mix(minhuCol, maxhuCol, huAlpha);
 		FragColor = mix(mycol, huLayer, huAlpha);
 		// FragColor = mix(mycol, huLayer, 1.0);
-	// }
+	}
 	   
 	// vec4 minBathymetryCol = vec4(0.0, 0.5, 0.0, 1.0);
 	// vec4 maxBathymetryCol = vec4(0.4, 0.2, 0.0, 1.0);
