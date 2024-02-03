@@ -192,6 +192,10 @@ int render()
 				ImGui::EndMenu();
 			}
 
+			if(ImGui::Button("<")) {
+				sim.stepBackwards();
+			}
+
 			if(ImGui::Button(sim.isPlaying() ? "Pause" : "Play")) {
 				if(sim.isPlaying()) {
 					sim.pause();
@@ -199,6 +203,11 @@ int render()
 					sim.play();
 				}
 			}
+
+			if(ImGui::Button(">")) {
+				sim.stepForward();
+			}
+
 			if(ImGui::Button("Reset")) {
 				sim.reset();
 			}

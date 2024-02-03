@@ -6,7 +6,7 @@
 // Simulation::Simulation() {
 
 // }
-void Simulation::loadSimulation(std::filesystem::path path, Shader& shader)
+void Simulation::loadSimulation(std::filesystem::path path, Shader &shader)
 {
 	if (_loaded)
 	{
@@ -320,14 +320,61 @@ void Simulation::closeSettingsWindow()
 	_showSimulationSettingsWindow = false;
 }
 
-bool Simulation::isPlaying() {
+bool Simulation::isPlaying()
+{
 	return _isPlaying;
 }
 
-void Simulation::openColorSettingsWindow() {
+void Simulation::openColorSettingsWindow()
+{
 	colorSettings = true;
 }
 
-void Simulation::closeColorSettingsWindow() {
+void Simulation::closeColorSettingsWindow()
+{
 	colorSettings = false;
+}
+
+void Simulation::stepForward()
+{
+	if (!_loaded) return;
+	if (_currentFileTimeIndex == _fileTimes.size() - 1)
+	{
+		return;
+	}
+
+	// Load displacement
+	_reader.getHeightsForTimeStep(_currentFileTimeIndex + 1, _hPlane.value().displacements.data());
+	_hPlane.value().updateDisplacementBuffer();
+	// Load hu
+	_reader.getHorizontalMomentumForTimeStep(_currentFileTimeIndex + 1, _hPlane.value().hu.data());
+	_hPlane.value().updateHuBuffer();
+	// Load hv
+	_reader.getVerticalMomentumForTimeStep(_currentFileTimeIndex + 1, _hPlane.value().hv.data());
+	_hPlane.value().updateHvBuffer();
+
+	_curTime = _fileTimes[_currentFileTimeIndex + 1];
+	_currentFileTimeIndex++;
+}
+
+void Simulation::stepBackwards()
+{
+	if (!_loaded) return;
+	if (_currentFileTimeIndex == 0)
+	{
+		return;
+	}
+
+	// Load displacement
+	_reader.getHeightsForTimeStep(_currentFileTimeIndex - 1, _hPlane.value().displacements.data());
+	_hPlane.value().updateDisplacementBuffer();
+	// Load hu
+	_reader.getHorizontalMomentumForTimeStep(_currentFileTimeIndex - 1, _hPlane.value().hu.data());
+	_hPlane.value().updateHuBuffer();
+	// Load hv
+	_reader.getVerticalMomentumForTimeStep(_currentFileTimeIndex - 1, _hPlane.value().hv.data());
+	_hPlane.value().updateHvBuffer();
+
+	_curTime = _fileTimes[_currentFileTimeIndex - 1];
+	_currentFileTimeIndex--;
 }

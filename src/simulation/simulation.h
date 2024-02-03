@@ -55,6 +55,9 @@ public:
 	void pause();
 	void reset();
 
+	void stepForward();
+	void stepBackwards();
+
 	void update(double deltaTime);
 	void render(Shader &shader);
 	void colorSettingsWindow(Shader &shader);
