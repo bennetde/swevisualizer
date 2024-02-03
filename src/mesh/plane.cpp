@@ -66,9 +66,9 @@ Plane::Plane(size_t nX, size_t nY, float cellWidth, float cellHeight) : _nX(nX),
 	glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, sizeof(float), (void *)0);
 	glEnableVertexAttribArray(2);
 
-	// hv
+	// hv 
 	glGenBuffers(1, &hvBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, displacementBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, hvBuffer);
 	glBufferData(GL_ARRAY_BUFFER, hv.size() * sizeof(float), hv.data(), GL_DYNAMIC_DRAW);
 	glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(float), (void *)0);
 	glEnableVertexAttribArray(3);
