@@ -20,9 +20,13 @@ A OpenGL visualizer for shallow water equations.
 - [ImGuiFileDialog](https://github.com/aiekick/ImGuiFileDialog)
 - Doxygen
 
-All dependencies other than OpenGL should be resolved by CMake itself.
+All dependencies other than OpenGL, Doxygen and NetCDF should be resolved by CMake itself.
 
 # Quick Setup
+
+Clone the project with `git clone --recurse-submodules git@gitlab.lrz.de:bennet/swevisualizer.git`.
+Make sure you have NetCDF & Doxygen installed and added to PATH if using Windows.
+
 
 ## Build System
 
