@@ -67,9 +67,8 @@ void Simulation::render(Shader &shader)
 	shader.setFloat("maxHv", maxHv);
 	shader.setFloat("minBathymetry", minBathymetry);
 	shader.setFloat("maxBathymetry", maxBathymetry);
-	shader.setBool("hv", hu);
+	shader.setBool("hu", hu);
 	shader.setBool("hv", hv);
-	shader.setBool("hv", h);
 
 	if (_showSimulationSettingsWindow)
 	{
@@ -96,9 +95,8 @@ void Simulation::render(Shader &shader)
 					play();
 				}
 			}
-			ImGui::SameLine();
-			// bool t = true;
-			// ImGui::Checkbox("Reverse", &t);
+			// ImGui::SameLine();
+			
 			ImGui::SameLine();
 			if (ImGui::Button("Reset"))
 			{
@@ -139,17 +137,14 @@ void Simulation::render(Shader &shader)
 			}
 
 			ImGui::InputFloat("Simulation speed", &speed);
-			// if (ImGui::Checkbox("hu", &hu))
-			// {
-			// 	shader.setBool("hu", hu);
-			// }
+
 			if (ImGui::Checkbox("hv", &hv))
 			{
 				shader.setBool("bool_hv", hv);
 			}
-			// if(ImGui::Checkbox("h", &h)) {
-			// 	shader.setBool("h", h);
-			// }
+			if(ImGui::Checkbox("hu", &hu)) {
+				shader.setBool("bool_hu", hu);
+			}
 
 			ImGui::Checkbox("reverse", &reverse);
 
@@ -175,12 +170,13 @@ void Simulation::colorSettingsWindow(Shader &shader)
 		{
 			shader.setFloat4("minCol", minCol);
 			shader.setFloat4("maxCol", maxCol);
+			shader.setFloat4("minBathymetryCol", minBathymetryCol);
+			shader.setFloat4("maxBathymetryCol", maxBathymetryCol);
 			shader.setFloat4("minhuCol", minhuCol);
 			shader.setFloat4("maxhuCol", maxhuCol);
 			shader.setFloat4("minhvCol", minhvCol);
 			shader.setFloat4("maxhvCol", maxhvCol);
-			shader.setFloat4("minBathymetryCol", minBathymetryCol);
-			shader.setFloat4("maxBathymetryCol", maxBathymetryCol);
+			
 		}
 		ImGui::SameLine();
 		if (ImGui::ColorPicker4("minColor", minCol))
@@ -191,6 +187,16 @@ void Simulation::colorSettingsWindow(Shader &shader)
 		if (ImGui::ColorPicker4("maxColor", maxCol))
 		{
 			shader.setFloat4("maxCol", maxCol);
+		}
+
+		if (ImGui::ColorPicker4("minBathymetryColor", minBathymetryCol))
+		{
+			shader.setFloat4("minBathymetryCol", minBathymetryCol);
+		}
+
+		if (ImGui::ColorPicker4("maxBathymetryColor", maxBathymetryCol))
+		{
+			shader.setFloat4("maxBathymetryCol", maxBathymetryCol);
 		}
 
 		if (ImGui::ColorPicker4("minHuColor", minhuCol))
@@ -211,16 +217,6 @@ void Simulation::colorSettingsWindow(Shader &shader)
 		if (ImGui::ColorPicker4("maxHvColor", maxhvCol))
 		{
 			shader.setFloat4("maxhvCol", maxhvCol);
-		}
-
-		if (ImGui::ColorPicker4("minBathymetryColor", minBathymetryCol))
-		{
-			shader.setFloat4("minBathymetryCol", minBathymetryCol);
-		}
-
-		if (ImGui::ColorPicker4("maxBathymetryColor", maxBathymetryCol))
-		{
-			shader.setFloat4("maxBathymetryCol", maxBathymetryCol);
 		}
 	}
 	ImGui::End();

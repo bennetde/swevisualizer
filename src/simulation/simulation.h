@@ -37,7 +37,6 @@ private:
 	
 	bool hu = false;
 	bool hv = false;
-	bool h = true;
 	bool reverse = false;
 
 	std::optional<std::filesystem::path> _curPath;
