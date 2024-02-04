@@ -3,11 +3,13 @@
 #include <optional>
 #include "netcdf_reader.h"
 #include "../mesh/plane.h"
-#include <vector> // Added vector header
+#include <vector>
 
-// Responsible for holding information about the current state of the simulation
-// (e.g. current sim time, reference to the models that will be updated by the simulation, netcdf-reader, if the simulation
-// is currently paused or playing)
+/**
+ * Responsible for holding information about the current state of the simulation
+ * (e.g. current sim time, reference to the models that will be updated by the simulation, netcdf-reader, if the simulation
+ * is currently paused or playing)
+ */
 class Simulation
 {
 private:
@@ -34,7 +36,7 @@ private:
 	float maxhvCol[4];
 	float minBathymetryCol[4];
 	float maxBathymetryCol[4];
-	
+
 	bool hu = false;
 	bool hv = false;
 	bool reverse = false;
@@ -48,24 +50,59 @@ private:
 	size_t _maxFileTimeIndex;
 
 public:
-	// Simulation();
-	void loadSimulation(std::filesystem::path path, Shader& shader);
+	/**
+	 * Load simulation data from specifies path and initialize the shader
+	 * @param path Specifies path to simulation data
+	 * @param shader Specifies the shader to be initialized
+	 */
+	void loadSimulation(std::filesystem::path path, Shader &shader);
+
+	/**
+	 * Start simulation
+	 */
 	void play();
+
+	/**
+	 * Pause simulation
+	 */
 	void pause();
+
+	/**
+	 * Reset simulation to start
+	 */
 	void reset();
 
+	/**
+	 * Step simulation forward or backward
+	 */
 	void stepForward();
 	void stepBackwards();
 
+	/**
+	 * Update simulation
+	 */
 	void update(double deltaTime);
+
+	/**
+	 * Render current state of simulation
+	 */
 	void render(Shader &shader);
+
+	/**
+	 * Display color setting
+	 */
 	void colorSettingsWindow(Shader &shader);
-
-	void openSettingsWindow();
-	void closeSettingsWindow();
-
 	void openColorSettingsWindow();
 	void closeColorSettingsWindow();
 
+	/**
+	 * Display or close simulation setting window
+	 */
+	void openSettingsWindow();
+	void closeSettingsWindow();
+
+	/**
+	 * Check if simulation is currently playing
+	 */
 	bool isPlaying();
 };

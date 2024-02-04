@@ -1,11 +1,15 @@
 #version 330 core
+
+// Output variable to color the fragment
 out vec4 FragColor;
 
+// Input variable
 in float o_displ;
 in float o_bathymetry;
 in float o_hu;
 in float o_hv;
 
+// Uniform variables
 uniform float minHeight;
 uniform float maxHeight;
 uniform float minHu;
@@ -26,15 +30,15 @@ uniform vec4 minBathymetryCol;
 uniform vec4 maxBathymetryCol;
 
 void main() {
-	// smoothstep (http://www.fundza.com/rman_shaders/smoothstep/)
+	// Smoothstep to normalize displacement (http://www.fundza.com/rman_shaders/smoothstep/)
 	float new_val01 = smoothstep(minHeight, maxHeight, o_displ);
 
-	//mix (https://registry.khronos.org/OpenGL-Refpages/gl4/html/mix.xhtml)
+	// Mix colors based on normalized displacement (https://registry.khronos.org/OpenGL-Refpages/gl4/html/mix.xhtml)
 	vec4 mycol = mix(minCol, maxCol, new_val01);
 	
 	
-
-	//Show hu and hv at the same time
+	// Depending on the set options, show the correct variables
+	// Show hu and hv at the same time
 	if (bool_hu && bool_hv) {
 		float speed = length(vec2(o_hu, o_hv));
 		float huAlpha = smoothstep(minHu, maxHu, abs(speed));
@@ -54,6 +58,7 @@ void main() {
 		FragColor = mix(mycol, huLayer, huAlpha);
 	}	
 
+	// Display bathymetry above water
 	if(o_bathymetry > 0.0) {
 		float bathymetryAlpha = smoothstep(minBathymetry, maxBathymetry, o_bathymetry);
         FragColor = mix(minBathymetryCol, maxBathymetryCol, bathymetryAlpha);

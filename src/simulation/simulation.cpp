@@ -3,9 +3,6 @@
 #include <algorithm>
 #include <iostream>
 
-// Simulation::Simulation() {
-
-// }
 void Simulation::loadSimulation(std::filesystem::path path, Shader &shader)
 {
 	if (_loaded)
@@ -16,20 +13,27 @@ void Simulation::loadSimulation(std::filesystem::path path, Shader &shader)
 	_reader.open(path);
 	_curPath = path;
 
-	// Create Plane with dimensions of the simulation
+	/**
+	 * Create Plane with dimensions of the simulation
+	 */
 	_hPlane = Plane{_reader.getXDimension(), _reader.getYDimension(), _reader.getCellWidth(), _reader.getCellHeight()};
 	_loaded = true;
 
-	// Load initial wave heights
+	/**
+	 * Load initial wave heights
+	 */
 	_reader.getHeightsForTimeStep(0, _hPlane.value().displacements.data());
 	_hPlane.value().updateDisplacementBuffer();
-	// eventuell minHeight, maxHeight werte aus displacements data lesen
 
-	// Load Bathymetry
+	/**
+	 * Load bathymetry data
+	 */
 	_reader.getBathymetry(_hPlane.value().bathymetry.data());
 	_hPlane.value().updateBathymetryBuffer();
 
-	// Load min and max height, hu, hv
+	/**
+	 * Load min and max height, hu and hv
+	 */
 	minHeight = _reader.getMinHeight();
 	maxHeight = _reader.getMaxHeight();
 	minHu = _reader.getMinHu();
@@ -37,11 +41,12 @@ void Simulation::loadSimulation(std::filesystem::path path, Shader &shader)
 	minHv = _reader.getMinHv();
 	maxHv = _reader.getMaxHv();
 
-	// minBathymetry = _reader.getMinBathymetry();
 	minBathymetry = 0.0;
 	maxBathymetry = _reader.getMaxBathymetry();
 
-	// Set Time
+	/**
+	 * Set time
+	 */
 	_fileTimes = _reader.getTimeSteps();
 
 	_maxFileTimeIndex = _fileTimes[_fileTimes.size() - 1];
@@ -96,7 +101,7 @@ void Simulation::render(Shader &shader)
 				}
 			}
 			// ImGui::SameLine();
-			
+
 			ImGui::SameLine();
 			if (ImGui::Button("Reset"))
 			{
@@ -142,7 +147,8 @@ void Simulation::render(Shader &shader)
 			{
 				shader.setBool("bool_hv", hv);
 			}
-			if(ImGui::Checkbox("hu", &hu)) {
+			if (ImGui::Checkbox("hu", &hu))
+			{
 				shader.setBool("bool_hu", hu);
 			}
 
@@ -162,10 +168,16 @@ void Simulation::render(Shader &shader)
 	}
 }
 
+/**
+ * Color settings using ImGui
+ */
 void Simulation::colorSettingsWindow(Shader &shader)
 {
 	if (ImGui::Begin("Color Settings", &colorSettings))
 	{
+		/**
+		 * Set uniform values to initial color settings depending on user input
+		 */
 		if (ImGui::Button("Reset"))
 		{
 			shader.setFloat4("minCol", minCol);
@@ -176,9 +188,11 @@ void Simulation::colorSettingsWindow(Shader &shader)
 			shader.setFloat4("maxhuCol", maxhuCol);
 			shader.setFloat4("minhvCol", minhvCol);
 			shader.setFloat4("maxhvCol", maxhvCol);
-			
 		}
 		ImGui::SameLine();
+		/**
+		 * ColorPickers for minimum and maximum values of different variables
+		 */
 		if (ImGui::ColorPicker4("minColor", minCol))
 		{
 			shader.setFloat4("minCol", minCol);
@@ -222,6 +236,9 @@ void Simulation::colorSettingsWindow(Shader &shader)
 	ImGui::End();
 }
 
+/**
+ * Update simulation state based on current time and playback settings
+ */
 void Simulation::update(double deltaTime)
 {
 	if (!_isPlaying || !_loaded)
@@ -233,12 +250,18 @@ void Simulation::update(double deltaTime)
 		return;
 	}
 
+	/**
+	 * Handles siumlation playing in reverse
+	 */
 	if (_currentFileTimeIndex == -1 && reverse)
 	{
 		pause();
 		return;
 	}
 
+	/**
+	 * Update simulation based on playback direction
+	 */
 	if (reverse)
 	{
 		_curTime -= 1 * speed;
@@ -333,7 +356,8 @@ void Simulation::closeColorSettingsWindow()
 
 void Simulation::stepForward()
 {
-	if (!_loaded) return;
+	if (!_loaded)
+		return;
 	if (_currentFileTimeIndex == _fileTimes.size() - 1)
 	{
 		return;
@@ -355,7 +379,8 @@ void Simulation::stepForward()
 
 void Simulation::stepBackwards()
 {
-	if (!_loaded) return;
+	if (!_loaded)
+		return;
 	if (_currentFileTimeIndex == 0)
 	{
 		return;
