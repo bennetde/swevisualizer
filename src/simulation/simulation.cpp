@@ -235,11 +235,12 @@ void Simulation::colorSettingsWindow(Shader &shader)
 
 /**
  * @brief set standard colors for the simulation
- * 
- * @param shader 
+ *
+ * @param shader
  */
-void Simulation::standardColors(Shader &shader) {
-	minCol[0] = 0.5f , minCol[1] = 0.7f, minCol[2] = 0.8f, minCol[3] = 1.0f;
+void Simulation::standardColors(Shader &shader)
+{
+	minCol[0] = 0.5f, minCol[1] = 0.7f, minCol[2] = 0.8f, minCol[3] = 1.0f;
 	maxCol[0] = 0.0f, maxCol[1] = 0.0f, maxCol[2] = 1.0f, maxCol[3] = 1.0f;
 	minhuCol[0] = 0.2f, minhuCol[1] = 0.0f, minhuCol[2] = 0.0f, minhuCol[3] = 1.0f;
 	maxhuCol[0] = 0.5f, maxhuCol[1] = 0.0f, maxhuCol[2] = 0.0f, maxhuCol[3] = 1.0f;
@@ -256,7 +257,6 @@ void Simulation::standardColors(Shader &shader) {
 	shader.setFloat4("maxhuCol", maxhuCol);
 	shader.setFloat4("minhvCol", minhvCol);
 	shader.setFloat4("maxhvCol", maxhvCol);
-
 }
 
 /**
@@ -294,35 +294,31 @@ void Simulation::update(double deltaTime)
 		_curTime += 1 * speed;
 	}
 
+	/**
+	 * Load displacement, hu and hv data based on current time as well as playback direction
+	 */
 	if (reverse)
 	{
 		if (_curTime <= _fileTimes[_currentFileTimeIndex])
 		{
-			// Load displacement
 			_reader.getHeightsForTimeStep(_currentFileTimeIndex, _hPlane.value().displacements.data());
 			_hPlane.value().updateDisplacementBuffer();
-			// Load hu
 			_reader.getHorizontalMomentumForTimeStep(_currentFileTimeIndex, _hPlane.value().hu.data());
 			_hPlane.value().updateHuBuffer();
-			// Load hv
 			_reader.getVerticalMomentumForTimeStep(_currentFileTimeIndex, _hPlane.value().hv.data());
 			_hPlane.value().updateHvBuffer();
 
 			_currentFileTimeIndex--;
 		}
 	}
-
 	else
 	{
 		if (_curTime >= _fileTimes[_currentFileTimeIndex + 1])
 		{
-			// Load displacement
 			_reader.getHeightsForTimeStep(_currentFileTimeIndex + 1, _hPlane.value().displacements.data());
 			_hPlane.value().updateDisplacementBuffer();
-			// Load hu
 			_reader.getHorizontalMomentumForTimeStep(_currentFileTimeIndex + 1, _hPlane.value().hu.data());
 			_hPlane.value().updateHuBuffer();
-			// Load hv
 			_reader.getVerticalMomentumForTimeStep(_currentFileTimeIndex + 1, _hPlane.value().hv.data());
 			_hPlane.value().updateHvBuffer();
 
@@ -386,13 +382,13 @@ void Simulation::stepForward()
 		return;
 	}
 
-	// Load displacement
+	/**
+	 * Load displacement, hu and hv data
+	 */
 	_reader.getHeightsForTimeStep(_currentFileTimeIndex + 1, _hPlane.value().displacements.data());
 	_hPlane.value().updateDisplacementBuffer();
-	// Load hu
 	_reader.getHorizontalMomentumForTimeStep(_currentFileTimeIndex + 1, _hPlane.value().hu.data());
 	_hPlane.value().updateHuBuffer();
-	// Load hv
 	_reader.getVerticalMomentumForTimeStep(_currentFileTimeIndex + 1, _hPlane.value().hv.data());
 	_hPlane.value().updateHvBuffer();
 
@@ -409,13 +405,13 @@ void Simulation::stepBackwards()
 		return;
 	}
 
-	// Load displacement
+	/**
+	 * Load displacement, hu and hv data
+	 */
 	_reader.getHeightsForTimeStep(_currentFileTimeIndex - 1, _hPlane.value().displacements.data());
 	_hPlane.value().updateDisplacementBuffer();
-	// Load hu
 	_reader.getHorizontalMomentumForTimeStep(_currentFileTimeIndex - 1, _hPlane.value().hu.data());
 	_hPlane.value().updateHuBuffer();
-	// Load hv
 	_reader.getVerticalMomentumForTimeStep(_currentFileTimeIndex - 1, _hPlane.value().hv.data());
 	_hPlane.value().updateHvBuffer();
 

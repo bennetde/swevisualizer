@@ -16,8 +16,6 @@ public:
 	 * Load and compile a shader using paths to the respective vertex and fragment shaders.
 	 */
 	Shader(const std::filesystem::path &vertexPath, const std::filesystem::path &fragmentPath);
-
-	// void standardColors();
 	
 	/**
 	 * Enables the current shader for rendering

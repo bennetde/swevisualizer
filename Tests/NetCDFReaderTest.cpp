@@ -12,7 +12,7 @@ TEST_CASE("CDFManagerTest", "[NetCDFReader]")
     std::filesystem::path path(netCDFPath);
 
     NetCDFReader cdfManager;
-	cdfManager.open(path);
+    cdfManager.open(path);
 
     SECTION("Test Dimensionen")
     {
@@ -22,19 +22,9 @@ TEST_CASE("CDFManagerTest", "[NetCDFReader]")
 
     SECTION("Teste getBathymetry")
     {
-        float expectedValue = 10.0f; // Erwarteter Wert an dieser Position
+        float expectedValue = 10.0f;
         float b[10 * 10];
         cdfManager.getBathymetry(b);
         REQUIRE(static_cast<bool>(b[0] == expectedValue));
-        // REQUIRE(b[0] == expectedValue);
     }
-
-    // SECTION("Teste ungültige Indizes")
-    // {
-    //     size_t invalidXIndex = 10; // Ungültiger Index (außerhalb der Grenzen)
-    //     size_t invalidYIndex = 10; // Ungültiger Index (außerhalb der Grenzen)
-
-    //     REQUIRE_THROWS_AS(cdfManager.getBathymetry(invalidXIndex, 0), std::invalid_argument);
-    //     REQUIRE_THROWS_AS(cdfManager.getBathymetry(0, invalidYIndex), std::invalid_argument);
-    // }
 }

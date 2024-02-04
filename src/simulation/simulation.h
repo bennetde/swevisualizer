@@ -73,7 +73,7 @@ public:
 	void reset();
 
 	/**
-	 * Step simulation forward or backward
+	 * Step simulation forwards or backwards
 	 */
 	void stepForward();
 	void stepBackwards();
