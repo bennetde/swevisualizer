@@ -41,6 +41,11 @@ void Simulation::loadSimulation(std::filesystem::path path, Shader &shader)
 	minHv = _reader.getMinHv();
 	maxHv = _reader.getMaxHv();
 
+	/**
+	 * Set standard colors
+	 */
+	standardColors(shader);
+
 	minBathymetry = 0.0;
 	maxBathymetry = _reader.getMaxBathymetry();
 
@@ -180,16 +185,8 @@ void Simulation::colorSettingsWindow(Shader &shader)
 		 */
 		if (ImGui::Button("Reset"))
 		{
-			shader.setFloat4("minCol", minCol);
-			shader.setFloat4("maxCol", maxCol);
-			shader.setFloat4("minBathymetryCol", minBathymetryCol);
-			shader.setFloat4("maxBathymetryCol", maxBathymetryCol);
-			shader.setFloat4("minhuCol", minhuCol);
-			shader.setFloat4("maxhuCol", maxhuCol);
-			shader.setFloat4("minhvCol", minhvCol);
-			shader.setFloat4("maxhvCol", maxhvCol);
+			standardColors(shader);
 		}
-		ImGui::SameLine();
 		/**
 		 * ColorPickers for minimum and maximum values of different variables
 		 */
@@ -234,6 +231,32 @@ void Simulation::colorSettingsWindow(Shader &shader)
 		}
 	}
 	ImGui::End();
+}
+
+/**
+ * @brief set standard colors for the simulation
+ * 
+ * @param shader 
+ */
+void Simulation::standardColors(Shader &shader) {
+	minCol[0] = 0.5f , minCol[1] = 0.7f, minCol[2] = 0.8f, minCol[3] = 1.0f;
+	maxCol[0] = 0.0f, maxCol[1] = 0.0f, maxCol[2] = 1.0f, maxCol[3] = 1.0f;
+	minhuCol[0] = 0.2f, minhuCol[1] = 0.0f, minhuCol[2] = 0.0f, minhuCol[3] = 1.0f;
+	maxhuCol[0] = 0.5f, maxhuCol[1] = 0.0f, maxhuCol[2] = 0.0f, maxhuCol[3] = 1.0f;
+	minhvCol[0] = 0.2f, minhvCol[1] = 0.0f, minhvCol[2] = 0.0f, minhvCol[3] = 1.0f;
+	maxhvCol[0] = 0.5f, maxhvCol[1] = 0.0f, maxhvCol[2] = 0.0f, maxhvCol[3] = 1.0f;
+	minBathymetryCol[0] = 0.0f, minBathymetryCol[1] = 0.5f, minBathymetryCol[2] = 0.0f, minBathymetryCol[3] = 1.0f;
+	maxBathymetryCol[0] = 0.4f, maxBathymetryCol[1] = 0.2f, maxBathymetryCol[2] = 0.0f, maxBathymetryCol[3] = 1.0f;
+
+	shader.setFloat4("minCol", minCol);
+	shader.setFloat4("maxCol", maxCol);
+	shader.setFloat4("minBathymetryCol", minBathymetryCol);
+	shader.setFloat4("maxBathymetryCol", maxBathymetryCol);
+	shader.setFloat4("minhuCol", minhuCol);
+	shader.setFloat4("maxhuCol", maxhuCol);
+	shader.setFloat4("minhvCol", minhvCol);
+	shader.setFloat4("maxhvCol", maxhvCol);
+
 }
 
 /**

@@ -96,6 +96,11 @@ public:
 	void closeColorSettingsWindow();
 
 	/**
+	 * Set the color of the simulation
+	 */
+	void standardColors(Shader &shader);
+
+	/**
 	 * Display or close simulation setting window
 	 */
 	void openSettingsWindow();
