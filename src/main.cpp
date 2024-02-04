@@ -185,13 +185,16 @@ int render()
 		 */
 		if (ImGui::BeginMainMenuBar())
 		{
-			if (ImGui::BeginMenu("File"))
-			{
-				if (ImGui::MenuItem("Open"))
-				{
-					openmenu = true;
-				}
-				ImGui::EndMenu();
+			// if (ImGui::BeginMenu("File"))
+			// {
+			// 	if (ImGui::MenuItem("Open"))
+			// 	{
+			// 		openmenu = true;
+			// 	}
+			// 	ImGui::EndMenu();
+			// }
+			if (ImGui::Button("Open File")) {
+				openmenu = true;
 			}
 #ifdef Debug
 			if (ImGui::BeginMenu("Debug"))
@@ -206,16 +209,23 @@ int render()
 			/**
 			 * Allows possibility to recenter camera
 			 */
-			if (ImGui::BeginMenu("Camera"))
-			{
-				if (ImGui::MenuItem("Re-center camera"))
-				{
-					camera.position = camera.originalPosition;
-					camera.front = camera.originalFront;
-					camera.up = camera.originalUp;
-				}
-				ImGui::EndMenu();
+			// if (ImGui::BeginMenu("Camera"))
+			// {
+			// 	if (ImGui::MenuItem("Re-center camera"))
+			// 	{
+			// 		camera.position = camera.originalPosition;
+			// 		camera.front = camera.originalFront;
+			// 		camera.up = camera.originalUp;
+			// 	}
+			// 	ImGui::EndMenu();
+			// }
+
+			if (ImGui::Button("Recenter Camera")) {
+				camera.position = camera.originalPosition;
+				camera.front = camera.originalFront;
+				camera.up = camera.originalUp;
 			}
+			
 			/**
 			 * Settings menu
 			 */
