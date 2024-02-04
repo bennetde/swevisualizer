@@ -36,10 +36,15 @@ void Simulation::loadSimulation(std::filesystem::path path, Shader &shader)
 	 */
 	minHeight = _reader.getMinHeight();
 	maxHeight = _reader.getMaxHeight();
-	minHu = _reader.getMinHu();
-	maxHu = _reader.getMaxHu();
-	minHv = _reader.getMinHv();
-	maxHv = _reader.getMaxHv();
+
+	// Too inaccurate
+	// minHu = _reader.getMinHu();
+	// maxHu = _reader.getMaxHu();
+	// minHv = _reader.getMinHv();
+	// maxHv = _reader.getMaxHv();
+
+	minHu = minHv = 0.0f;
+	maxHu = maxHv = 100.0f;
 
 	/**
 	 * Set standard colors
