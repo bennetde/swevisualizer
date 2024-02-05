@@ -1,4 +1,4 @@
-A OpenGL visualizer for shallow water equations.
+# A OpenGL visualizer for shallow water equations.
 
 ![A screenshot of the software should appear here](screenshots/SWEVisualizer_Chile.png)
 
