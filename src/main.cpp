@@ -30,8 +30,8 @@ int render();
  */
 unsigned int SCR_WIDTH = 1000;
 unsigned int SCR_HEIGHT = 800;
-const std::filesystem::path vertexShaderPath(std::filesystem::current_path() / "resources/shaders/test.vs");
-const std::filesystem::path fragmentShaderPath(std::filesystem::current_path() / "resources/shaders/test.fs");
+const std::filesystem::path vertexShaderPath(std::filesystem::current_path() / "resources/shaders/vertex.vs");
+const std::filesystem::path fragmentShaderPath(std::filesystem::current_path() / "resources/shaders/fragment.fs");
 
 /**
  * Camera and input variables

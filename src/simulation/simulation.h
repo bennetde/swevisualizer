@@ -92,7 +92,13 @@ public:
 	 * Display color setting
 	 */
 	void colorSettingsWindow(Shader &shader);
+	/**
+	 * Open color settings window in IMGUI
+	 */
 	void openColorSettingsWindow();
+	/**
+	 * Close settings window in IMGUI
+	*/
 	void closeColorSettingsWindow();
 
 	/**
@@ -101,9 +107,12 @@ public:
 	void standardColors(Shader &shader);
 
 	/**
-	 * Display or close simulation setting window
+	 * Open settings window in IMGUI
 	 */
 	void openSettingsWindow();
+	/**
+	 * Close settings window in IMGUI
+	 */
 	void closeSettingsWindow();
 
 	/**

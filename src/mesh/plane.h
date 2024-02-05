@@ -39,10 +39,19 @@ public:
 	void render(Shader &shader);
 
 	/**
-	 * Update buffers in the GPU
+	 * Update displacement buffer in the GPU with the value in displacements
 	 */
 	void updateDisplacementBuffer();
+	/**
+	 * Update hu buffer in the GPU with the value in hu
+	 */
 	void updateHuBuffer();
+	/**
+	 * Update hv buffer in the GPU with the value in hv
+	 */
 	void updateHvBuffer();
+	/**
+	 * Update bathymetry buffer in the GPU with the value in bathymetry
+	 */
 	void updateBathymetryBuffer();
 };

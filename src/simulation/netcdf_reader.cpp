@@ -11,7 +11,7 @@ void NetCDFReader::open(std::filesystem::path filePath)
     {
         throw std::invalid_argument("Could not open NETCDF-File");
     }
-    std::cout << "Opened with id " << ncid << std::endl;
+
     if ((retval = nc_inq_dimid(ncid, "x", &dimXPointer)))
     {
         throw std::runtime_error("Could not load dimension x");

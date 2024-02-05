@@ -4,6 +4,9 @@
 #include <filesystem>
 #include <array>
 
+/**
+ * Handles NetCDF files and provides getters for reading them.
+*/
 class NetCDFReader
 {
 private:
@@ -26,6 +29,9 @@ public:
 	 */
 	void open(std::filesystem::path filePath);
 
+	/**
+	 * Closes the file.
+	*/
 	void close();
 
 	/**
@@ -53,20 +59,44 @@ public:
 	 */
 	void getHeightsForTimeStep(size_t timeIndex, float heights[]);
 
+	/**
+	 * Gets the minimum height value stored in the file.
+	*/
 	float getMinHeight();
 
+	/**
+	 * Gets the maximum height value stored in the file.
+	*/
 	float getMaxHeight();
 
+	/**
+	 * Gets the minimum hu value stored in the file.
+	*/
 	float getMinHu();
 
+	/**
+	 * Gets the maximum hu value stored in the file.
+	*/
 	float getMaxHu();
 
+	/**
+	 * Gets the minimum hv value stored in the file.
+	*/
 	float getMinHv();
 
+	/**
+	 * Gets the maximum hv value stored in the file.
+	*/
 	float getMaxHv();
 
+	/**
+	 * Gets the minimum bathymetry value stored in the file.
+	*/
 	float getMinBathymetry();
 
+	/**
+	 * Gets the maximum bathymetry value stored in the file.
+	*/
 	float getMaxBathymetry();
 
 	/**

@@ -5,7 +5,7 @@
 #include <GLFW/glfw3.h>
 
 /**
- * Give possibility to move around to view plane
+ * Camera class to move around to view plane
  */
 class Camera
 {
