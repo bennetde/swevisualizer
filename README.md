@@ -41,8 +41,8 @@ compiled.
 
 ## Compiling
 
-Linux: Compile inside the `build` directory using `make`. A executable should appear inside your
-`build` directory.
+Linux: Compile inside the `build` directory using `make SWEVisualizer`. A executable should appear inside your
+`build/src` directory.
 
 Windows: Compile using `cmake --build .` inside the `build` directory. The executable might be hidden under `build\src\Debug\SWEVisualizer.exe`.
 
