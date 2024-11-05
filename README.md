@@ -1,5 +1,8 @@
 # A OpenGL visualizer for shallow water equations.
 
+This project was my final submission for the Bachelor Practical Course "Tsunami Simulation" at TUM.
+It provides a quick and efficient solution for visualizing tsunami simulations.
+
 ![A screenshot of the software should appear here](screenshots/SWEVisualizer_Chile.png)
 
 # Features
